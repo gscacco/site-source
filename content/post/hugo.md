@@ -4,6 +4,8 @@ draft = false
 title = "hugo - Static Site Generator"
 author = " G.Scacco"
 lang = "it"
+tags = ["hugo", "web"]
+categories = ["web"]
 +++
 
 ## Introduzione
@@ -85,4 +87,4 @@ Una volta completato l'articolo si può generare il sito web definitivo con il c
 
     $ hugo -t shiori
 
-Il risultato sarà presente nella cartella public.
+Dopo questo comando la cartella public conterrà i files pronti per essere pubblicati.
