@@ -1,3 +1,7 @@
-baseurl = "http://yourSiteHere/"
-languageCode = "en-us"
-title = "My New Hugo Site"
+baseurl = "http://gscacco.github.io/"
+languageCode = "it-it"
+title = "G.Scacco"
+canonifyurls = true
+description = "Un blog di informatica e dintorni"
+[params]
+author = "G.Scacco"
