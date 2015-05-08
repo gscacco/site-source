@@ -3,5 +3,7 @@ languageCode = "it-it"
 title = "G.Scacco"
 canonifyurls = true
 description = "Un blog di informatica e dintorni"
+disqusShortname = "gscaccoio"
 [params]
 author = "G.Scacco"
+gaCode = "UA-62774857-1"

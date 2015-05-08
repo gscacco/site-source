@@ -88,3 +88,4 @@ Una volta completato l'articolo si può generare il sito web definitivo con il c
     $ hugo -t shiori
 
 Dopo questo comando la cartella public conterrà i files pronti per essere pubblicati.
+
