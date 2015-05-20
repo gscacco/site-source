@@ -6,6 +6,7 @@ author = " G.Scacco"
 lang = "it"
 tags = ["hugo", "web"]
 categories = ["web"]
+socialsharing = true
 +++
 
 ## Introduzione

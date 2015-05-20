@@ -6,11 +6,12 @@ author = " G.Scacco"
 lang = "it"
 tags = ["clojure", "project euler"]
 categories = ["programming", "clojure"]
+socialsharing = true
 +++
 
 # Project Euler
 
-[Project Euler](https://projecteuler.net/) è un interessantissimo sito web contenente una raccolta di problemi. Si tratta di sfide matematiche ed informatiche da risolvere tramite l'uso di un linguaggio di programmazione a scelta. Molti sono gli utenti registrati che si sono impegnati nelle varie soluzioni e nei più disparati linguaggi: si va dal linguaggio macchia a Java, dal c++ al lisp, etc.
+[Project Euler](https://projecteuler.net/) è un interessantissimo sito web contenente una raccolta di problemi. Si tratta di sfide matematiche ed informatiche da risolvere tramite l'uso di un linguaggio di programmazione a scelta. Molti sono gli utenti registrati che si sono impegnati nelle varie soluzioni e nei più disparati linguaggi: si va dal linguaggio macchina a Java, dal c++ al lisp, etc.
 
 Vorrei proporvi in questo post (e spero in altri) le mie soluzioni in clojure.
 

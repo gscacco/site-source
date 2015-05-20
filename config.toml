@@ -4,6 +4,16 @@ title = "G.Scacco"
 canonifyurls = true
 description = "Un blog di informatica e dintorni"
 disqusShortname = "gscaccoio"
+theme = "redlounge"
 [params]
 author = "G.Scacco"
-gaCode = "UA-62774857-1"
+gaid = "UA-62774857-1"
+sidebartitle = "gscaccoio"
+sidebartagline = "Programmazione e dintorni"
+[[menu.footer]]
+name = "Blog"
+url = "/post"
+[[menu.social]]
+pre = "<i class='fa fa-twitter'></i>"
+url = "https://twitter.com/gscaccoio"
+identifier = "twitter"
