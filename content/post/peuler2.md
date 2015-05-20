@@ -48,9 +48,9 @@ In questo caso, quindi, abbiamo creato un binding di nome *prossimo-termine* con
 Proviamo ad applicare la funziona appena definita:
 
     user => (fibonacci-step '(2 1))
-    user => (3 2 1)
+    (3 2 1)
     user => (fibonacci-step (fibonacci-step '(2 1))))
-    user => (5 3 2 1)
+    (5 3 2 1)
 
 Come possiamo vedere la nostra lista cresce a sinistra con i nuovi termini calcolati.
 ## Ricorsione
@@ -68,24 +68,26 @@ Il ritorno è una sequenza lazy (letteralmente *pigra*), cioè una lista in cui 
 Ad esempio:
 
     user => (take 2 (iterate fibonacci-step '(2 1)))
-    user => ((2 1) (3 2 1))
+    ((2 1) (3 2 1))
 
 La funzione take-while prende in input un predicato (il predicato è una funzione che torna un booleano). Ad esempio:
 
     user => (take-while #(<= (count %) 6) (iterate fibonacci-step '(2 1)))
-    user => ((2 1) (3 2 1) (5 3 2 1) (8 5 3 2 1) (13 8 5 3 2 1))
+    ((2 1) (3 2 1) (5 3 2 1) (8 5 3 2 1) (13 8 5 3 2 1))
 
 Nell'esempio il predicato torna true solo se il numero dei termini della i-esima applicazione è <= 6. Se il predicato fosse sempre true l'esecuzione non avrebbe mai fine.
 
 ## Finalizzazione
 
-A questo punto tutti gli elementi sono pronti per essere utilizzati. Gli ingredienti sono:
+Gli ingredienti per la finalizzazione sono i seguenti:
 
 1. La funzione fibonacci-step
 1. La funzione iterate
 1. La funzione take-while
 
-```
+e possiamo utilizzarli all'interno della funzione peuler2:
+
+``` clojure
 (defn peuler2 []
   (let [mf (fn [xs] (<= (first xs) 4000000))]
     (->> (iterate fibonacci-step '(2 1))
@@ -93,4 +95,27 @@ A questo punto tutti gli elementi sono pronti per essere utilizzati. Gli ingredi
          (last)
          (filter even?)
          (reduce +))))
+```
+
+## Note
+
+Vorrei evidenziare l'uso della funzione ->>. La sua definizione formale è la seguente: (->> x & forms). Il suo scopo è quello di appendere il parametro x alla fine della prima forma. Successivamente, il risultato sarà appeso alla fine delle altre forme.
+
+Con un esempio:
+
+``` clojure
+user => (->> (range)
+              (filter even?)
+              (take 6)
+              (reduce +))
+30
+```
+
+Il risultato è la somma dei primi 6 numeri pari (0 2 4 6 8 10).
+
+La forma ->> è molto utile per semplificare la lettura del codice; per ottenere lo stesso risultato senza ->> avremmo dovuto scrivere:
+
+``` clojure
+user => (reduce + (take 6 (filter even? (range))))
+30
 ```
