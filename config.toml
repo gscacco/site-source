@@ -4,7 +4,7 @@ title = "G.Scacco"
 canonifyurls = true
 description = "Un blog di informatica e dintorni"
 disqusShortname = "gscaccoio"
-theme = "redlounge"
+theme = "gscacco-hugo-redlounge"
 [params]
 author = "G.Scacco"
 gaid = "UA-62774857-1"
