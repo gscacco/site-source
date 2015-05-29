@@ -7,6 +7,7 @@ lang = "it"
 tags = ["hugo", "web"]
 categories = ["web"]
 socialsharing = true
+oglocale="it_IT"
 +++
 
 ## Introduzione
