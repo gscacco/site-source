@@ -1,0 +1,18 @@
+{{ define "main" }}
+  <header class="page-heading">
+    <p class="eyebrow">{{ if eq .Section "post" }}Archivio{{ else }}Esplora{{ end }}</p>
+    <h1>{{ .Title }}</h1>
+    {{ with .Content }}<div class="content">{{ . }}</div>{{ end }}
+  </header>
+  {{ range (.Paginate .Pages).Pages }}
+    <article class="post-preview">
+      <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+      {{ partial "post-meta.html" . }}
+      <div class="summary">{{ .Summary }}</div>
+      <a class="read-more" href="{{ .RelPermalink }}">Continua a leggere <span aria-hidden="true">→</span></a>
+    </article>
+  {{ else }}
+    <p>Non ci sono contenuti da mostrare.</p>
+  {{ end }}
+  {{ partial "pagination.html" . }}
+{{ end }}

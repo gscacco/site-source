@@ -3,7 +3,6 @@ date = "2015-05-19T14:23:54+02:00"
 draft = false
 title = "Project Euler - Problema 2" 
 author = " G.Scacco"
-lang = "it"
 tags = ["clojure", "project euler"]
 categories = ["programming", "clojure"]
 socialsharing = true

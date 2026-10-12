@@ -1,0 +1,11 @@
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span>© {{ now.Year }} {{ site.Params.author }}</span>
+    <ul class="footer-links">
+      {{ range site.Menus.social }}
+        <li><a href="{{ .URL }}" rel="me">{{ .Name }}</a></li>
+      {{ end }}
+      <li><a href="{{ "index.xml" | relURL }}">RSS</a></li>
+    </ul>
+  </div>
+</footer>

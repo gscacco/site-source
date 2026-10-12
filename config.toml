@@ -1,19 +1,45 @@
-baseurl = "http://gscacco.github.io/"
+baseURL = "https://gscacco.github.io/"
 languageCode = "it-it"
+defaultContentLanguage = "it"
 title = "G.Scacco"
-canonifyurls = true
 description = "Un blog di informatica e dintorni"
-disqusShortname = "gscaccoio"
-theme = "gscacco-hugo-redlounge"
+enableRobotsTXT = true
+
+[pagination]
+  pagerSize = 10
+
+[permalinks]
+  post = "/post/:slug/"
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
 [params]
-author = "G.Scacco"
-gaid = "UA-62774857-1"
-sidebartitle = "gscaccoio"
-sidebartagline = "Programmazione e dintorni"
-[[menu.footer]]
-name = "Blog"
-url = "/post"
-[[menu.social]]
-pre = "<i class='fa fa-twitter'></i>"
-url = "https://twitter.com/gscaccoio"
-identifier = "twitter"
+  author = "G. Scacco"
+  tagline = "Programmazione e dintorni"
+  description = "Un blog di informatica e dintorni"
+  disqusShortname = "gscaccoio"
+
+[services.disqus]
+  shortname = "gscaccoio"
+
+[[menus.main]]
+  name = "Home"
+  pageRef = "/"
+  weight = 10
+
+[[menus.main]]
+  name = "Articoli"
+  pageRef = "/post"
+  weight = 20
+
+[[menus.main]]
+  name = "Tag"
+  pageRef = "/tags"
+  weight = 30
+
+[[menus.social]]
+  name = "Twitter"
+  url = "https://twitter.com/gscaccoio"
+  weight = 10

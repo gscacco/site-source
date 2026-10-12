@@ -1,0 +1,13 @@
+{{ define "main" }}
+  <header class="page-heading">
+    <p class="eyebrow">Esplora gli argomenti</p>
+    <h1>{{ .Title }}</h1>
+  </header>
+  <ul class="term-list">
+    {{ range .Data.Terms.Alphabetical }}
+      <li><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a><span>{{ .Count }}</span></li>
+    {{ else }}
+      <li>Non ci sono ancora argomenti.</li>
+    {{ end }}
+  </ul>
+{{ end }}

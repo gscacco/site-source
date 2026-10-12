@@ -1,0 +1,7 @@
+<p class="post-meta">
+  <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02/01/2006" }}</time>
+  {{ with .Params.author }}<span> · {{ . | strings.TrimSpace }}</span>{{ end }}
+  {{ with .Params.tags }}
+    <span class="meta-tags"> · {{ range $index, $tag := . }}{{ if $index }}, {{ end }}<a href="{{ "tags/" | relLangURL }}{{ $tag | urlize }}/">{{ $tag }}</a>{{ end }}</span>
+  {{ end }}
+</p>

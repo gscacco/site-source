@@ -3,7 +3,6 @@ date = "2015-05-04T12:35:03+02:00"
 draft = false
 title = "hugo - Static Site Generator"
 author = " G.Scacco"
-lang = "it"
 tags = ["hugo", "web"]
 categories = ["web"]
 socialsharing = true

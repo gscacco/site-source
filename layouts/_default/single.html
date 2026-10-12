@@ -1,0 +1,20 @@
+{{ define "main" }}
+  <article class="article">
+    <header class="article-header">
+      <p class="eyebrow">{{ with .Section }}{{ . | humanize }}{{ end }}</p>
+      <h1>{{ .Title }}</h1>
+      {{ partial "post-meta.html" . }}
+    </header>
+    <div class="content">
+      {{ .Content }}
+    </div>
+    {{ with .Params.categories }}
+      <div class="article-categories">Categorie: {{ range $index, $category := . }}{{ if $index }}, {{ end }}<a href="{{ "categories/" | relLangURL }}{{ $category | urlize }}/">{{ $category }}</a>{{ end }}</div>
+    {{ end }}
+    {{ if and (not .Draft) site.Config.Services.Disqus.Shortname }}
+      <section class="comments" aria-label="Commenti">
+        {{ template "_internal/disqus.html" . }}
+      </section>
+    {{ end }}
+  </article>
+{{ end }}
