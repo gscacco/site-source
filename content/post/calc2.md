@@ -6,7 +6,7 @@ tags = ["clojure", "clojurescript", "spreadsheet", "scittle", "lisp"]
 categories = ["programming", "clojure"]
 socialsharing = true
 +++
-# From Spreadsheet Tables to Programmable Data
+# Introduction
 
 Spreadsheets are excellent at organizing information into rows and columns. But once data is represented as a collection of structured objects, something interesting happens: we can stop thinking in terms of cells and start thinking in terms of data and computations.
 
