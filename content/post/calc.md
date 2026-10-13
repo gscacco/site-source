@@ -40,7 +40,7 @@ A cell could contain a literal value:
 It could contain a data structure:
 
 ```clojure
-{:name "Radar"
+{:name "Car"
  :budget 12500
  :status :active}
 ```
@@ -74,7 +74,7 @@ This approach becomes particularly interesting when cells contain structured dat
 Suppose a cell contains a project description:
 
 ```clojure
-{:name "Radar"
+{:name "Car"
  :budget 12500
  :status :active}
 ```
@@ -104,7 +104,7 @@ A cell can hold a map, a vector, a sequence, a keyword, a string, or a number. T
 Consider a project whose budget consists of several components:
 
 ```clojure
-{:name "Radar"
+{:name "Car"
  :budget [12300 34500 12000]
  :status :active}
 ```
