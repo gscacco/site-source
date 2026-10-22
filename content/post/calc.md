@@ -7,7 +7,7 @@ categories = ["programming", "clojure"]
 socialsharing = true
 +++
 
-# What If Every Spreadsheet Cell Were a Little Lisp Machine? 🧮
+# What if every spreadsheet cell were a little lisp machine? 🧮
 
 ## Introduction
 
