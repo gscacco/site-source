@@ -6,11 +6,14 @@ tags = ["clojure", "clojurescript", "spreadsheet", "scittle", "lisp"]
 categories = ["programming", "clojure"]
 socialsharing = true
 +++
-# Introduction
 
-Spreadsheets are excellent at organizing information into rows and columns. But once data is represented as a collection of structured objects, something interesting happens: we can stop thinking in terms of cells and start thinking in terms of data and computations.
+# From Spreadsheet Tables to Programmable Data
 
-Consider a familiar spreadsheet:
+## Introduction
+
+Spreadsheets are excellent at organizing information into rows and columns. They are less convincing when a simple question turns into a maze of cell references, nested formulas, and increasingly creative uses of `VLOOKUP`.
+
+Consider a familiar table:
 
 | Name | Category | Budget | Status |
 |---|---|---:|---|
@@ -19,15 +22,15 @@ Consider a familiar spreadsheet:
 | Cycle Paths | Mobility | 50,000 | active |
 | Summer Festival | Culture | 15,300 | active |
 
-A conventional spreadsheet encourages us to manipulate this information through cell references, formulas and built-in functions.
+A conventional spreadsheet encourages us to manipulate this information through cell references and built-in functions.
 
-But what if we could turn the table into a ClojureScript data structure?
+But there's another option: turn the table into structured ClojureScript data and work with the information directly.
 
-## One table, one transformation
+## From rows to data
 
-The first row provides the field names. Each subsequent row becomes a map, and the entire table becomes a vector of maps.
+The first row contains the field names. Each subsequent row can become a map, and the entire table a vector of maps.
 
-We can define a reusable function to perform this transformation:
+A small reusable function does the conversion:
 
 ```clojure
 (defn rows->maps [data]
@@ -37,16 +40,14 @@ We can define a reusable function to perform this transformation:
           (rest data))))
 ```
 
-The function takes a sequence of rows, converts the first row into keyword keys, and combines each remaining row with those keys using `zipmap`.
-
-Suppose the spreadsheet range `A1:D5` contains the table above. We can transform it into structured data:
+Given a spreadsheet range `A1:D5`, we can write:
 
 ```clojure
 (def projects
   (rows->maps A1:D5))
 ```
 
-The result is:
+The result is structured data:
 
 ```clojure
 [{:name "Urban Gardens"
@@ -67,9 +68,9 @@ The result is:
   :status "active"}]
 ```
 
-Instead of referring to column C or row 7, we can now refer to `:budget` or `:status`.
+Now we can refer to `:budget` rather than column C, or `:status` rather than remembering which column we put it in. The data has names that describe what it means, rather than coordinates that describe where it happens to live.
 
-## Ask questions directly
+## Ask the data
 
 Which projects are active?
 
@@ -77,13 +78,13 @@ Which projects are active?
 (filter #(= "active" (:status %)) projects)
 ```
 
-Which projects have a budget greater than 20,000?
+Which ones have a budget above 20,000?
 
 ```clojure
 (filter #(> (:budget %) 20000) projects)
 ```
 
-What is the total budget for Environment projects?
+And what is the total budget for Environment projects?
 
 ```clojure
 (->> projects
@@ -94,13 +95,13 @@ What is the total budget for Environment projects?
 
 The result is `17300`.
 
-We can also group projects by category:
+We can group projects by category:
 
 ```clojure
 (group-by :category projects)
 ```
 
-Or produce a compact summary:
+Or generate a summary containing the number of projects and their combined budgets:
 
 ```clojure
 (->> projects
@@ -111,13 +112,13 @@ Or produce a compact summary:
              :budget (reduce + (map :budget items))})))
 ```
 
-No special query language is needed. Filtering, grouping, sorting and aggregation are simply functions operating on data.
+Filtering, grouping, and aggregation are ordinary functions operating on ordinary data. No additional query language is needed, and no formula has to be copied down 200 rows while everyone hopes the references behave.
 
-## Cells become programmable
+## From data to computation
 
-A cell could contain a value, a structured object or an expression that operates on other cells. One cell might hold the original table; another might filter its records; a third might calculate a summary.
+In a programmable spreadsheet, a cell could hold the original table, another could filter its records, and a third could calculate a summary.
 
-For example:
+For example, if `C2` contains the vector of project maps, this expression calculates the total budget of active projects:
 
 ```clojure
 (->> C2
@@ -126,16 +127,16 @@ For example:
      (reduce +))
 ```
 
-Here, `C2` represents a cell containing the vector of maps. The expression calculates the total budget of active projects.
+The cell isn't restricted to storing a value or invoking a spreadsheet-specific formula. It can evaluate an expression that transforms structured data, using the same language available everywhere else in the environment.
 
-The important shift is conceptual: **the spreadsheet becomes a place where data is not only stored, but also programmed.**
+This is a small change in appearance, but a significant change in the computational model.
 
-## A small change with broader implications
+## The grid is still useful
 
-This does not require replacing the spreadsheet with a database or building a large analytics platform. A familiar grid can remain the interface for entering and inspecting information, while ClojureScript provides a compact and composable language for working with it.
+None of this requires replacing the spreadsheet with a database or an analytics platform. The grid remains a convenient interface for entering and inspecting information; ClojureScript provides a general-purpose language for transforming it.
 
-Tables remain useful. But they no longer have to dictate how we think about the data.
+Tables are still useful. They simply stop dictating every operation we can perform on the information they contain.
 
-Instead of learning another collection of spreadsheet-specific functions, users gain access to a general-purpose programming language, structured data and reusable transformations.
+The idea isn't to make spreadsheets more complicated by introducing programming for its own sake. It's to remove arbitrary boundaries between storing data, querying it, and defining reusable computations.
 
-The grid provides the data. The language provides the power.
+**The grid provides the data. The language provides the power. And ideally, neither requires a 47th worksheet named `Summary_Final_v3`.**
