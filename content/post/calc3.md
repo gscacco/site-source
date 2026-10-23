@@ -7,13 +7,15 @@ categories = ["programming", "clojure"]
 socialsharing = true
 +++
 
-# Introduction
+# EDN and the Challenge of Making Complex Data Readable
 
-EDN (Extensible Data Notation) is a data representation format used in the Clojure ecosystem. Its strength lies in its simplicity and flexibility: maps, vectors, lists, sets, and atomic values can be combined to represent complex structures.
+## Introduction
 
-However, a structure that is easy for a program to process is not necessarily easy for a human to understand.
+EDN (Extensible Data Notation) is a data representation format used in the Clojure ecosystem. It is compact, flexible, and remarkably good at representing complex structures using maps, vectors, lists, sets, and atomic values.
 
-Consider the following example:
+Unfortunately, being easy for a program to process doesn't automatically make something easy for a human to read. Computers are perfectly happy with deeply nested structures. Humans tend to lose track of the closing parentheses somewhere around the third level.
+
+Consider this example:
 
 ```clojure
 {:name "Garden"
@@ -23,36 +25,48 @@ Consider the following example:
         :members ["Bob" "Carol"]}}
 ```
 
-The textual representation is compact and precise. Yet as structures grow in size and depth, nested collections become harder to follow. Readers must mentally reconstruct the relationships between properties and values.
+For a small structure, the textual representation works well. As the data grows, however, understanding it requires mentally reconstructing the relationships between properties, values, and nested collections. At some point, reading the data starts to feel less like inspecting information and more like navigating a very small jungle.
 
-## One Structure, Multiple Views
+The problem isn't EDN itself. It's expecting one representation to serve every purpose.
 
-A natural solution is to represent EDN data as an interactive tree. Maps become expandable nodes, vectors become ordered collections, and atomic values are displayed directly.
+## One structure, multiple views
 
-This makes the hierarchical structure easier to explore, but a tree is not always the best representation.
+A natural solution is an interactive tree.
 
-Suppose we want to compare the budgets and statuses of dozens of projects. A table would probably be more effective. If we want to transform the data using Clojure functions, the textual representation may be more convenient.
+Maps become expandable nodes, vectors become ordered collections, and atomic values are displayed directly. Instead of confronting the entire structure at once, we can explore only the branches that matter.
 
-Each view highlights certain aspects of the underlying structure while making others less visible. There is no universally optimal representation: the most useful view depends on the task.
+But trees aren't universally useful. Suppose we want to compare the budgets and statuses of dozens of projects. A table is probably a better choice. If we want to transform the data with Clojure functions, the textual representation may be more convenient.
 
-## Separating Data from Presentation
+Each representation answers a different question:
 
-A promising approach is to keep EDN as the canonical data model while providing multiple views of the same content.
+- **Tree:** How is this structure organized?
+- **Table:** How do these records compare?
+- **Text:** What exactly is the underlying data?
 
-An interactive tree supports exploration. A tabular view facilitates comparison and aggregation. A text editor provides direct access to the original EDN representation.
+Trying to force all three tasks into one interface would be rather like insisting that every document must be read as a filesystem tree. Technically possible, perhaps, but not a particularly persuasive user experience.
 
-Ideally, these views should remain synchronized. Changes made through one representation should be reflected in the others without creating competing versions of the data.
+## One model, no competing copies
 
-This separation becomes even more interesting when EDN is used alongside Clojure expressions. A cell in a computational environment might contain a map, another cell might extract one of its properties, and a third might calculate an aggregate value.
+The important design decision is to keep EDN as the canonical data model while allowing different interfaces to present and modify it.
 
-The interface must then do more than display data. It must support exploration, transformation, and computation.
+An interactive tree could make nested structures easier to explore. A tabular view could expose selected records and fields for comparison. A text editor could provide direct access to the original representation.
 
-## From Data Viewer to Interactive Environment
+These shouldn't be separate copies of the data. Editing a value in one view should update the same underlying structure, with the other views reflecting the change.
 
-The challenge is to balance the expressive power of EDN with the readability required for effective human interaction.
+That sounds obvious, but maintaining consistency becomes more challenging when views support different operations. A table may expose only selected fields, while a tree reveals the full hierarchy. The interface must preserve information that isn't currently visible and handle edits without accidentally destroying unrelated data.
 
-There is no need to abandon the original data structure to make it accessible. Instead, the textual representation can be treated as one interface to the underlying model, rather than the only possible one.
+In other words, the presentation can change, but the data must remain trustworthy.
 
-An environment built with ClojureScript can take advantage of this separation. The data model remains consistent, while the interface adapts its presentation to the operation being performed.
+## Beyond a data viewer
 
-The goal is not to simplify EDN itself, but to make complex data easier to understand and manipulate without sacrificing its expressive power.
+The idea becomes more interesting when EDN lives in a programmable environment.
+
+Imagine a cell containing a map, another extracting its budget, and a third calculating an aggregate. The same structure can be inspected visually, edited as text, and manipulated through ClojureScript expressions.
+
+The interface is no longer just a viewer. It becomes a way to move between understanding data and working with it.
+
+This is where the distinction between data and presentation matters most. The underlying model remains consistent, while the interface adapts to the task. ClojureScript supplies the means to transform the data; the user interface determines how comfortably people can explore and understand it.
+
+The goal isn't to make EDN less expressive or hide its structure behind layers of abstraction. It's to make that structure accessible without forcing users to read every nested map as if they were debugging a production incident.
+
+**EDN should define the data, not dictate how humans must look at it.**
