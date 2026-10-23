@@ -203,7 +203,7 @@ At worst, we get a spreadsheet that confuses a few people and delights a few Lis
 
 At best, we get something more interesting: a programming environment hiding in plain sight, inside the most familiar grid on the planet.
 
-And perhaps, finally, a spreadsheet that doesn't need a macro to explain why it exists.without introducing a separate formula language.
+And perhaps, finally, a spreadsheet that doesn't need a macro to explain why it exists without introducing a separate formula language.
 
 Its Lisp syntax also offers an interesting opportunity for the user interface. Expressions have an explicit structure that an editor can understand, potentially supporting structural navigation, bracket matching, and other editing facilities beyond ordinary text editing.
 
