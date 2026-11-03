@@ -82,7 +82,7 @@ The idea is to do everything inside one function, following these steps:
 
 The three functions in steps 2, 3, and 4 must take the agent state as their first argument and return the new state. Actions are queued on the same agent and executed in order; that is what makes the transition from `ServerSocket` to `socket` and then to reading a predictable sequence.
 
-{{< diagram name="tcp-agent" number="1" wide="true" caption="The three actions share the same agent state. Each action receives the previous result and returns the state passed to the next action." >}}
+{{< diagram name="tcp-agent" number="1" caption="The three actions share the same agent state. Each action receives the previous result and returns the state passed to the next action." >}}
 
 Let us start with the first one:
 

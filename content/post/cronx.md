@@ -45,7 +45,7 @@ This separation is intentional. Process supervision is an operating system conce
 
 The result is a tool that can be copied to a machine, configured, started, and inspected without introducing additional infrastructure.
 
-{{< diagram name="cronx-architecture" number="1" wide="true" caption="cronx keeps the scheduler local: one configuration file, one history database, one shared log, and a CLI that can inspect both stores." >}}
+{{< diagram name="cronx-architecture" number="1" caption="cronx keeps the scheduler local: one configuration file, one history database, one shared log, and a CLI that can inspect both stores." >}}
 
 ## Configuration as an explicit contract 📜
 

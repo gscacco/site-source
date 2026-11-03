@@ -999,7 +999,7 @@ main.container {
 /* Figures and editorial components */
 
 .figure {
-  margin: 2.6rem -2.75rem 2.9rem;
+  margin: 2.6rem 0 2.9rem;
 }
 
 .figure img,
@@ -1012,10 +1012,6 @@ main.container {
 
 .figure--diagram svg {
   padding: 1rem;
-}
-
-.figure--diagram {
-  margin-inline: 0;
 }
 
 .figure--wide {

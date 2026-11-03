@@ -50,7 +50,7 @@ Each mechanism has a specific purpose, and neither needs to become a general-pur
 
 This separation extends the execution model described in the second article. Controlling a process is necessary, but it does not by itself explain the outcome of an execution.
 
-{{< diagram name="cronx-observability" number="1" wide="true" caption="Execution history records what happened; the shared log records what the process said. The run identifier connects the two without turning either into a general-purpose monitoring system." >}}
+{{< diagram name="cronx-observability" number="1" caption="Execution history records what happened; the shared log records what the process said. The run identifier connects the two without turning either into a general-purpose monitoring system." >}}
 
 ## Execution history as structured data 🧾
 
