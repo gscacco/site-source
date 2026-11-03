@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" role="img" aria-labelledby="cronx-architecture-title cronx-architecture-desc">
+  <title id="cronx-architecture-title">The local architecture of cronx</title>
+  <desc id="cronx-architecture-desc">A scheduler reads a TOML configuration, starts job processes, records execution history in SQLite, writes process output to a shared log, and exposes both stores through a command-line interface.</desc>
+
+  <defs>
+    <marker id="arrow-cronx-architecture" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L8 4L0 8Z" fill="#a45c36"/>
+    </marker>
+  </defs>
+
+  <g fill="none" stroke="#d9d2c3" stroke-width="1">
+    <path d="M40 60H860M40 180H860M40 300H860M40 420H860"/>
+    <path d="M170 40V440M330 40V440M620 40V440M780 40V440"/>
+  </g>
+
+  <g fill="none" stroke="#24251f" stroke-width="1.5">
+    <rect x="40" y="108" width="200" height="112"/>
+    <rect x="330" y="150" width="240" height="150"/>
+    <rect x="640" y="108" width="220" height="112"/>
+    <rect x="40" y="338" width="200" height="94"/>
+    <rect x="330" y="338" width="240" height="94"/>
+    <rect x="640" y="338" width="220" height="94"/>
+  </g>
+
+  <g fill="none" stroke="#a45c36" stroke-width="1.5" marker-end="url(#arrow-cronx-architecture)">
+    <path d="M240 164H330"/>
+    <path d="M570 194H640"/>
+    <path d="M450 300V338"/>
+    <path d="M570 250H600V385H640"/>
+    <path d="M240 385H330"/>
+  </g>
+
+  <path d="M140 432V456H750V432" fill="none" stroke="#a45c36" stroke-width="1.2" stroke-dasharray="5 6" marker-end="url(#arrow-cronx-architecture)"/>
+
+  <g font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="10" fill="#6b6a63" letter-spacing="1.2">
+    <text x="64" y="136">CONFIGURATION</text>
+    <text x="354" y="178">SCHEDULER</text>
+    <text x="664" y="136">JOB PROCESS</text>
+    <text x="64" y="366">COMMAND LINE</text>
+    <text x="354" y="366">HISTORY / SQLITE</text>
+    <text x="664" y="366">SHARED LOG</text>
+  </g>
+
+  <g font-family="'Newsreader', Georgia, serif" font-size="27" fill="#24251f">
+    <text x="64" y="178">cron.toml</text>
+    <text x="354" y="220">scheduler</text>
+    <text x="664" y="178">jobs</text>
+    <text x="64" y="408">inspect</text>
+    <text x="354" y="408">runs</text>
+    <text x="664" y="408">output</text>
+  </g>
+
+  <g font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="10" fill="#6b6a63">
+    <text x="250" y="154">reads</text>
+    <text x="578" y="184">spawns</text>
+    <text x="462" y="326">records</text>
+    <text x="606" y="238">writes</text>
+    <text x="252" y="375">inspects</text>
+    <text x="424" y="474">inspect</text>
+  </g>
+
+  <g fill="#a45c36">
+    <circle cx="600" cy="250" r="3"/>
+    <circle cx="600" cy="385" r="3"/>
+    <circle cx="750" cy="432" r="3"/>
+  </g>
+
+  <text x="40" y="470" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="9" fill="#6b6a63" letter-spacing="1.2">LOCAL FILES / NO EXTERNAL SERVICE</text>
+</svg>

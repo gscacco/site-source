@@ -1,122 +1,132 @@
 +++
 date = "2015-05-28T15:53:08+02:00"
 draft = false
-title = "Un server TCP in Clojure"
+title = "A TCP Server in Clojure"
+slug = "un-server-tcp-in-clojure"
+description = "Building a small TCP server in Clojure with an agent-based concurrency model."
 tags = ["clojure", "tcp server"]
 categories = ["programming", "clojure"]
 socialsharing = true
 +++
 
-# Scopo
-Lo scopo di questo articolo è quello di mostrare l'implementazione un server tcp in clojure mediante l'uso di un agent.
-## Agent
-Nella documentazione ufficiale ([Clojure Agents]) l'agent viene descritto come segue:
+## One request, three actions 📨
+
+A TCP server usually suggests a loop, a thread pool, and a connection queue. This example starts with something smaller: mutable state and a queue of asynchronous actions. The goal is not a production-ready server, but understanding how a Clojure agent can coordinate `ServerSocket`, `accept`, and reading a line.
+
+## Why an agent? 🤖
+
+The official documentation ([Clojure agents](https://clojure.org/reference/agents)) describes agents as follows:
 
 > Agents provide shared access to mutable state
 
-Estrapolando ancora dalla documentazione ufficiale:
+Further on, the same documentation says:
 
 >Agents are bound to a single storage location for their lifetime, and only allow mutation of that location (to a new state) to occur as a result of an action.
 
-Traducendo in italiano:
+*Actions* are asynchronous functions that receive the old state as their first argument; the new state is the value they return.
 
->Gli agents sono legati ad una singola unità di memorizzazione durante tutta la loro vita. Essi permettono il cambiamento di questa unità di memorizzazione (in un nuovo stato) solo come il risultato di una azione.
-
-Le *azioni* sono funzioni asincrone aventi come primo argomento il vecchio stato; il nuovo stato è il ritorno della loro elaborazione.
-
-L'agent è un'entità reattiva (esegue in modalità asincrona le funzioni) ma non autonoma: tutto il suo comportamento viene comandato dall'*esterno*. Vediamo come crearne uno:
+An agent is reactive (it executes functions asynchronously) but not autonomous: all of its behaviour is commanded from the outside. Let us create one:
 
 ```clojure
 (def a (agent 0))
 ```
-qui viene creato un agent il cui stato iniziale è il valore 0.
 
-E' possibile, ovviamente, sia leggere che modificare lo stato dell'agent: la lettura avviene tramite la funzione [deref] mentre la modifica avviene tramite il ritorno delle funzioni *inviate* all'agent (vedi [send] e [send-off]).
+Here, the agent is created with an initial state of 0.
 
-Ad esempio, definiamo la seguente funzione:
+We can both read and modify the agent's state: reading happens through [`deref`](https://clojuredocs.org/clojure.core/deref), while modification happens through the return value of functions *sent* to the agent (see [`send`](https://clojuredocs.org/clojure.core/send) and [`send-off`](https://clojuredocs.org/clojure.core/send-off)).
+
+For example, define the following function:
 
 ```clojure
-(defn f [vecchio-stato]
+(defn f [old-state]
 	(do (Thread/sleep 5000)
-	    (inc vecchio-stato)))
+	    (inc old-state)))
 ```
-ed inviamola all'agent a:
+and send it to agent `a`:
 
 ```clojure
 (send a f)
 ```
-L'esecuzione della funzione send è immediato. Dereferenziando l'agent a (prima della scadenza del timeout di 5 secondi) troveremmo il valore 0. Solo dopo la scadenza del timeout il valore verrebbe incrementato ad 1.
+
+`send` returns immediately. If we dereference agent `a` before the five-second delay expires, we still see `0`; only after the delay does the value become `1`.
+
+Choosing the right function matters. `send` is intended for CPU-bound actions; `send-off` is intended for actions that may block, such as I/O. We will use `send-off` because `accept` and `readLine` can wait for a long time.
 
 
 ```sh
-user => (send a f)
-user => @a
+user=> (send a f)
+user=> @a
 0
-user => @a
+user=> @a
 0
-# dopo 5 secondi
-user => @a
+# after 5 seconds
+user=> @a
 1
 ```
 
-# Il server TCP
-Utilizzeremo al nostro scopo le classi messe a disposizione dalla JDK. In particolare, faremo uso della classe [ServerSocket]. Ma prima di tutto definiamo il nostro agent:
+## The server state 🧱
+
+We will use classes from the JDK, specifically [`ServerSocket`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/ServerSocket.html). First, however, let us define the agent:
 
 ```clojure
 (agent {:server nil :socket nil})
 ```
-Si tratta di una mappa composta di due soli elementi: il server ed il socket. Inizialmente entrambi sono valorizzati a nil.
+It is a map with two elements: the server and the socket. Initially both are `nil`.
 
-L'idea è di realizzare il tutto all'interno di una funzione ed effettuare i seguenti passi elementari:
+The idea is to do everything inside one function, following these steps:
 
-1. Creare l'agent con il suo stato iniziale (tutto a nil)
-2. Inviare all'agent una funzione che crei il ServerSocket
-3. Inviare all'agent una funzione che si fermi in accept
-4. Inviare all'agent una fiunzione che stampi a schermo la stringa ricevuta
+1. Create the agent with its initial state (both values `nil`).
+2. Send the agent a function that creates the `ServerSocket`.
+3. Send the agent a function that blocks in `accept`.
+4. Send the agent a function that prints the received string.
 
-Le tre funzioni ai punti 2, 3 e 4 devono avere come primo parametro lo stato dell'agent e restituire il nuovo stato. Iniziamo realizzando la prima:
+The three functions in steps 2, 3, and 4 must take the agent state as their first argument and return the new state. Actions are queued on the same agent and executed in order; that is what makes the transition from `ServerSocket` to `socket` and then to reading a predictable sequence.
 
-## Implementazione
+{{< diagram name="tcp-agent" number="1" wide="true" caption="The three actions share the same agent state. Each action receives the previous result and returns the state passed to the next action." >}}
+
+Let us start with the first one:
+
+## Implementation 🛠️
 
 ```clojure
 (ns tcp-server
   (:import (java.io InputStreamReader BufferedReader))
   (:import (java.net ServerSocket)))
   
-(defn create-server [stato port]
+(defn create-server [state port]
   (let [ss (ServerSocket. port)]
     {:server ss :socket nil}))
 ```
-La definizione della funzione *create-server* fa esattamente quanto detto: crea un server socket sulla porta fornita in input e restituisce il nuovo stato.
+`create-server` does exactly what it says: it creates a server socket on the given port and returns the new state.
 
-Creiamo ora la funzione di cui al punto 3:
+Now the function from step 3:
 
 ```clojure
-(defn accept-connection [stato]
-  (let [ss (stato :server)
+(defn accept-connection [state]
+  (let [ss (state :server)
         socket (.accept ss)]
     {:server ss :socket socket}))
 ```
-Anche qui il funzionamento è abbastanza semplice:
+The mechanics are simple:
 
-* preleviamo l'oggetto ServerSocket dal vecchio stato (essendo una mappa basta riferire la chiave :server)
-* invochiamo il metodo *accept*
-* restituiamo il nuovo stato con socket valorizzato
+* Take the `ServerSocket` from the old state using the `:server` key.
+* Call `accept`.
+* Return the new state with the socket populated.
 
-L'ultima funzione da realizzare è quella di cui al punto 4:
+The last function is the one from step 4:
 
 ```clojure
-(defn print-string [stato]
-  (let [str (->> (stato :socket)
+(defn print-string [state]
+  (let [line (->> (state :socket)
                  (.getInputStream)
                  (InputStreamReader.)
                  (BufferedReader.)
                  (.readLine))]
-    (println str)))
+    (println line)))
 ```
-Questa funzione è un po' più lunga solo perché, per leggere una riga di testo dal socket, dobbiamo utilizzare la classe BufferedReader.
+This function is longer mainly because reading a line from the socket requires the [`BufferedReader`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/BufferedReader.html) class.
 
-A questo punto manca solo la definizione della funzione principale:
+Now comes the main function:
 
 ```clojure
 (defn tcp-server [port]
@@ -127,16 +137,31 @@ A questo punto manca solo la definizione della funzione principale:
         (send-tcp print-string)
         tcp-agent)))
 ```
-Questa funzione ha un solo parametro di input: il numero della porta su cui creare il server tcp. La sua definizione è abbastanza semplice ma vorrei evidenziare alcuni punti:
+This function takes one input: the port on which to create the TCP server. Its definition is simple, but two points are worth noting:
 
-* all'interno della let ho creato un binding con una funzione parziale *send-tcp* per ridurre il codice necessario
-* le funzioni inviate riceveranno in automatico come primo parametro lo stato dell'agent
+* The `let` binds a partial function, `send-tcp`, to reduce the amount of code needed.
+* The functions sent to the agent automatically receive the agent state as their first argument.
 
- Per domande o dubbi vi prego di utilizzare il form disqus sottostante.
+`send-off` returns immediately, so `tcp-server` does not wait for the socket to be ready: it returns the agent while the actions continue in the background. To try it, evaluate the expression in a REPL and send a line from another terminal:
 
-[Clojure Agents]:http://clojure.org/agents
-[deref]:http://clojuredocs.org/clojure.core/deref
-[send]:http://clojuredocs.org/clojure_core/clojure.core/send
-[send-off]:http://clojuredocs.org/clojure_core/clojure.core/send-off
-[ServerSocket]:http://docs.oracle.com/javase/7/docs/api/java/net/ServerSocket.html
+```clojure
+(def server (tcp-server 8080))
+```
+
+```sh
+$ nc localhost 8080
+```
+
+## What is missing 🧩
+
+This is a teaching example, not a complete server. It accepts one connection, reads one line, sends no response, and does not explicitly close its resources. Also, `print-string` returns `nil`, so after printing, the agent state no longer contains the server or the socket.
+
+A real server would need an `accept` loop, explicit connection handling, resource cleanup, and an error policy. This example shows the coordination model; the rest is engineering work, not agent magic.
+
+## References 🔗
+
+- [Clojure agents](https://clojure.org/reference/agents)
+- [Clojure `send-off`](https://clojuredocs.org/clojure.core/send-off)
+- [Java `ServerSocket`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/ServerSocket.html)
+- [Java `BufferedReader`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/BufferedReader.html)
 

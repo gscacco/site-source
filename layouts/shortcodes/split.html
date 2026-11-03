@@ -1,0 +1,3 @@
+{{ $ratio := .Get "ratio" | default "6-6" }}
+{{ $ratio = replace $ratio "/" "-" }}
+<div class="split split--{{ $ratio }}">{{ .Inner | safeHTML }}</div>

@@ -1,0 +1,15 @@
+{{ define "main" }}
+  <header class="page-heading page-heading--projects">
+    <div class="page-heading__copy">
+      <p class="eyebrow">Selected work</p>
+      <h1>{{ .Title }}</h1>
+      {{ with .Content }}<div class="page-intro">{{ . }}</div>{{ end }}
+    </div>
+  </header>
+
+  <div class="project-grid project-grid--page">
+    {{ range hugo.Data.projects }}
+      {{ partial "project-card.html" . }}
+    {{ end }}
+  </div>
+{{ end }}

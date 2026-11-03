@@ -1,10 +1,19 @@
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand" href="{{ site.Home.RelPermalink }}">
-      <span class="brand-name">{{ site.Title }}</span>
-      <span class="brand-tagline">{{ site.Params.tagline }}</span>
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" focusable="false">
+          <rect x=".5" y=".5" width="31" height="31" fill="none" stroke="currentColor"/>
+          <path d="M8 10h16M8 16h10M8 22h16" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <circle cx="24" cy="16" r="2.6" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="brand-copy">
+        <span class="brand-name">{{ site.Title }}</span>
+        <span class="brand-tagline">{{ site.Params.tagline }}</span>
+      </span>
     </a>
-    <nav aria-label="Navigazione principale">
+    <nav class="site-nav" aria-label="Main navigation">
       <ul class="nav-list">
         {{ range site.Menus.main }}
           <li><a href="{{ .URL | relLangURL }}"{{ if $.IsMenuCurrent "main" . }} aria-current="page"{{ end }}>{{ .Name }}</a></li>

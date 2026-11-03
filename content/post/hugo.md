@@ -1,92 +1,110 @@
 +++
 date = "2015-05-04T12:35:03+02:00"
 draft = false
-title = "hugo - Static Site Generator"
+title = "Hugo - Static Site Generator"
+slug = "hugo-static-site-generator"
+description = "Why static site generation with Hugo can replace the database-backed machinery of a traditional CMS."
 author = " G.Scacco"
 tags = ["hugo", "web"]
 categories = ["web"]
 socialsharing = true
-oglocale="it_IT"
+oglocale="en_US"
 +++
 
-## Introduzione
+An article does not change when a new reader arrives. Yet in a traditional CMS, the server rebuilds the page every time someone requests it.
 
-I *Content Management Systems* (CMS) comunemente utilizzati dai bloggers sono applicazioni web basate su un db (generalmente MySql) ed implementate in un linguaggio di programmazione di alto livello: php, java, c#, etc.
+The *Content Management Systems* (CMS) commonly used by bloggers are web applications backed by a database (usually MySQL) and implemented in a high-level language: PHP, Java, C#, and so on.
 
-Il db rappresenta la base dati dentro la quale vengono inseriti gli articoli, le pagine e le altre informazioni necessarie al funzionamento del CMS.
+The database holds the articles, pages, and other information the CMS needs to operate.
 
-Quando un utente accede tramite il suo browser al sito web, il web server esegue esegue i seguenti passi elementari:
+When a user opens the site in a browser, the web server performs the following steps:
 
-1. analisi della richiesta
-2. accesso e query al db
-3. generazione di una pagina html
-4. invio della pagina generata
+1. Parse the request.
+2. Access and query the database.
+3. Generate an HTML page.
+4. Send the generated page.
 
-Tutto questo ha un costo non banale in termini di cpu, ram ed io: al crescere del numero degli utenti connessi devono di conseguenza crescere le risorse impiegate.
+All of this has a non-trivial cost in CPU, RAM, and I/O. As the number of connected users grows, the resources required grow with it.
 
-Il mercato ha dato un prezzo a questa necessità e i vari providers (aruba, hostgator, etc.) richiedono il pagamento di un abbonamento annuale a costo crescente in base alle performances richieste.
+The market has put a price on that requirement. Providers such as Aruba and HostGator charge an annual subscription whose cost increases with the performance requested.
 
-Ma tutte queste performances servono *veramente* ?
+But are all those resources *really* necessary?
 
-Generare ogni volta al volo le pagine html degli articoli è veramente necessario o si potrebbero generare una volta per tutte staticamente ?
+Does every article page need to be generated on demand, or could it be generated once and served many times?
 
-La risposta sono gli *Static Site Generators*.
+Static site generators reverse the model: generate once, serve many times.
 
-## La soluzione hugo
+## Hugo: generating instead of interpreting ⚡
 
-[hugo](http://gohugo.io) è uno Static Site Generator scritto in go. Le sue caratteristiche fondamentali sono le seguenti:
+{{< callout type="warning" title="A note on versions" >}}
+This article was written in 2015. Commands using `yaourt`, the `hugo new post/...` path, and the `shiori` theme reflect Hugo and Arch Linux at that time. The current repository uses Nix, local templates, and a different configuration: this walkthrough explains the model, not how to reproduce the present publication step by step.
+{{< /callout >}}
 
-* Velocità nel rendering statico delle pagine
-* Semplicità di utilizzo
-* Portabilità (gira praticamente su tutte le piattaforme)
-* Flessibilità
+[Hugo](https://gohugo.io) is a static site generator written in Go. Its main characteristics are:
 
-Ma soprattutto è open source (SimPL-2.0).
+* Fast static rendering.
+* Simple to use.
+* Portable across platforms.
+* Flexible.
 
-Su arch esiste un pacchetto AUR e quindi per istallarlo basta eseguire:
+Most importantly, it is open source.
+
+## Installing Hugo and creating the site 📦
+
+On Arch, there is an AUR package, so installing it is as simple as:
 
     $ yaourt hugo
 
-A questo punto creare un blog è molto semplice:
+Creating a site is then straightforward:
 
     $ mkdir my-blog
     $ cd my-blog
     $ hugo new site .
 
-All'interno della cartella my-blog sarà presente un file di configurazione del sito web: config.toml. Questo file va modificato in accordo alle esigenze del caso. Il contenuto del file è abbastanza semplice ed autoesplicativo:
+The `my-blog` directory will contain a site configuration file, `config.toml`. Edit it according to your needs. Its contents are simple and self-explanatory:
 
     baseurl = "http://yourSiteHere/"
     languageCode = "en-us"
     title = "My New Hugo Site"
 
-A questo punto possiamo aggiungere il primo post del blog con il seguente comando:
+We can now add the first article with:
 
-    $ hugo new post/primoarticolo.md
+    $ hugo new post/first-post.md
 
-Il comando produrrà il seguente file markdown:
+The command produces the following Markdown file:
 
     +++
     date = "2015-05-05T11:44:32+02:00"
     draft = true
-    title = "prova"
+    title = "First post"
 
     +++
 
-L'unico parametro *funzionale* dell'intestazione è *draft*: se true hugo non lo inserirà nel sito generato. Il contenuto dell'articolo dovrà essere inserito dopo l'intestazione e quindi dopo l'ultimo +++.
+Among the front matter fields, `draft` decides whether the content enters the generated site: if it is `true`, Hugo excludes it. The article text goes after the front matter, below the final `+++`.
 
-hugo è skinnable con diversi temi disponibili su github. Per utilizzarli basta eseguire il seguente comando:
+Hugo can be customized with themes available on GitHub. To download them, run:
 
     $ git clone --recursive https://github.com/spf13/hugoThemes themes
 
-L'applicazione fornisce un piccolo server web che consente la preview del sito. Per attivarlo basta eseguire:
+## Previewing the site locally 👀
+
+The application includes a small web server for previewing the site. Start it with:
 
     $ hugo server --theme=shiori --buildDrafts
 
-L'opzione theme consente di scegliere il tema mentre buildDrafts dice a hugo di presentare anche gli articoli con il parametro draft impostato a true.
+The `theme` option selects the theme, while `buildDrafts` tells Hugo to include articles whose `draft` field is set to `true`.
 
-Una volta completato l'articolo si può generare il sito web definitivo con il comando:
+## Generating the site 🚀
+
+Once the article is complete, generate the final site with:
 
     $ hugo -t shiori
 
-Dopo questo comando la cartella public conterrà i files pronti per essere pubblicati.
+After this command, the `public` directory contains the files ready to publish.
+
+## References 🔗
+
+- [Hugo documentation](https://gohugo.io/documentation/)
+- [Hugo themes](https://themes.gohugo.io/)
+- [Nix flakes](https://wiki.nixos.org/wiki/Flakes)
 

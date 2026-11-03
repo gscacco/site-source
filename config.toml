@@ -1,8 +1,8 @@
 baseURL = "https://gscacco.github.io/"
-languageCode = "it-it"
-defaultContentLanguage = "it"
+locale = "en-US"
+defaultContentLanguage = "en"
 title = "G.Scacco"
-description = "Un blog di informatica e dintorni"
+description = "A blog about computer science and beyond"
 enableRobotsTXT = true
 
 [pagination]
@@ -17,9 +17,21 @@ enableRobotsTXT = true
 
 [params]
   author = "G. Scacco"
-  tagline = "Programmazione e dintorni"
-  description = "Un blog di informatica e dintorni"
+  tagline = "Programming and beyond"
+  description = "A blog about computer science and beyond"
   disqusShortname = "gscaccoio"
+
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = false
+  [markup.highlight]
+    noClasses = false
+    lineNos = false
+    tabWidth = 2
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 3
+    ordered = false
 
 [services.disqus]
   shortname = "gscaccoio"
@@ -30,12 +42,17 @@ enableRobotsTXT = true
   weight = 10
 
 [[menus.main]]
-  name = "Articoli"
+  name = "Posts"
   pageRef = "/post"
   weight = 20
 
 [[menus.main]]
-  name = "Tag"
+  name = "Projects"
+  pageRef = "/projects"
+  weight = 25
+
+[[menus.main]]
+  name = "Tags"
   pageRef = "/tags"
   weight = 30
 

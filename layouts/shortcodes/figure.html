@@ -1,0 +1,22 @@
+{{ $src := .Get "src" }}
+{{ $alt := .Get "alt" | default "" }}
+{{ $caption := .Get "caption" }}
+{{ $number := .Get "number" }}
+{{ $wide := eq (.Get "wide") "true" }}
+{{ $loading := .Get "loading" | default "lazy" }}
+{{ $url := $src }}
+{{ $resource := .Page.Resources.GetMatch $src }}
+{{ if $resource }}
+  {{ $url = $resource.RelPermalink }}
+{{ else if not (strings.HasPrefix $src "http") }}
+  {{ $url = $src | relURL }}
+{{ end }}
+<figure class="figure{{ if $wide }} figure--wide{{ end }}">
+  <img src="{{ $url }}" alt="{{ $alt }}" loading="{{ $loading }}" decoding="async">
+  {{ if or $caption $number }}
+    <figcaption class="figure__caption">
+      {{ with $number }}<span class="figure__number">Fig. {{ . }}</span>{{ end }}
+      {{ with $caption }}<span class="figure__caption-text">{{ . | markdownify }}</span>{{ end }}
+    </figcaption>
+  {{ end }}
+</figure>

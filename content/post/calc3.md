@@ -2,18 +2,13 @@
 date = "2026-06-22T15:14:00+02:00"
 draft = false
 title = "EDN and the Challenge of Making Complex Data Readable"
+description = "Why EDN needs more than one representation, and how a canonical data model can support tree, table, and text views."
 tags = ["clojure", "clojurescript", "spreadsheet", "scittle", "lisp"]
 categories = ["programming", "clojure"]
 socialsharing = true
 +++
 
-# EDN and the Challenge of Making Complex Data Readable
-
-## Introduction
-
-EDN (Extensible Data Notation) is a data representation format used in the Clojure ecosystem. It is compact, flexible, and remarkably good at representing complex structures using maps, vectors, lists, sets, and atomic values.
-
-Unfortunately, being easy for a program to process doesn't automatically make something easy for a human to read. Computers are perfectly happy with deeply nested structures. Humans tend to lose track of the closing parentheses somewhere around the third level.
+An EDN (Extensible Data Notation) map can be valid, compact, and still make a reader work harder than the data deserves.
 
 Consider this example:
 
@@ -27,9 +22,9 @@ Consider this example:
 
 For a small structure, the textual representation works well. As the data grows, however, understanding it requires mentally reconstructing the relationships between properties, values, and nested collections. At some point, reading the data starts to feel less like inspecting information and more like navigating a very small jungle.
 
-The problem isn't EDN itself. It's expecting one representation to serve every purpose.
+EDN is compact, flexible, and remarkably good at representing complex structures with maps, vectors, lists, sets, and atomic values. The problem isn't the format. It's expecting one representation to serve every purpose.
 
-## One structure, multiple views
+## One structure, multiple views 🌳
 
 A natural solution is an interactive tree.
 
@@ -43,9 +38,11 @@ Each representation answers a different question:
 - **Table:** How do these records compare?
 - **Text:** What exactly is the underlying data?
 
+{{< diagram name="edn-views" number="1" caption="One canonical EDN model can support several views. The representation changes with the question; the underlying data does not." >}}
+
 Trying to force all three tasks into one interface would be rather like insisting that every document must be read as a filesystem tree. Technically possible, perhaps, but not a particularly persuasive user experience.
 
-## One model, no competing copies
+## One model, no competing copies 🧩
 
 The important design decision is to keep EDN as the canonical data model while allowing different interfaces to present and modify it.
 
@@ -57,7 +54,7 @@ That sounds obvious, but maintaining consistency becomes more challenging when v
 
 In other words, the presentation can change, but the data must remain trustworthy.
 
-## Beyond a data viewer
+## Beyond a data viewer 🧭
 
 The idea becomes more interesting when EDN lives in a programmable environment.
 
@@ -67,6 +64,17 @@ The interface is no longer just a viewer. It becomes a way to move between under
 
 This is where the distinction between data and presentation matters most. The underlying model remains consistent, while the interface adapts to the task. ClojureScript supplies the means to transform the data; the user interface determines how comfortably people can explore and understand it.
 
+A related experiment is [this ClojureScript demo](https://youtu.be/DLFrMWeInLA?si=uWwN8CreMd_i9Lwt). It starts from a similar premise: data and computation share a language, and the interface has a strong visual idea of its own. What makes it worth watching is not the novelty of the technology, but the way the visual model carries part of the explanation. That is the standard any programmable data interface should be judged against.
+
 The goal isn't to make EDN less expressive or hide its structure behind layers of abstraction. It's to make that structure accessible without forcing users to read every nested map as if they were debugging a production incident.
 
 **EDN should define the data, not dictate how humans must look at it.**
+
+The hard part is keeping that promise across every view. A tree, a table, and a text editor are only useful if they remain honest about the same underlying value.
+
+## References 🔗
+
+- [EDN specification](https://github.com/edn-format/edn)
+- [ClojureScript](https://clojurescript.org/)
+- [Scittle](https://github.com/babashka/scittle)
+- [ClojureScript demo on YouTube](https://youtu.be/DLFrMWeInLA?si=uWwN8CreMd_i9Lwt)

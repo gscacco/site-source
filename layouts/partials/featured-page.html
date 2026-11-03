@@ -1,0 +1,11 @@
+{{ $posts := where site.RegularPages "Section" "post" }}
+{{ $featured := false }}
+{{ with where $posts "Params.featured" true }}
+  {{ $featured = index . 0 }}
+{{ end }}
+{{ if not $featured }}
+  {{ with $posts }}
+    {{ $featured = index . 0 }}
+  {{ end }}
+{{ end }}
+{{ return $featured }}

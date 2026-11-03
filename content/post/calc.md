@@ -2,14 +2,13 @@
 date = "2026-06-13T14:00:00+02:00"
 draft = false
 title = "Rethinking the Spreadsheet as a Programmable Environment"
+subtitle = "What If Every Spreadsheet cell were a little Lisp Machine? 🧮"
+description = "A speculative look at spreadsheets as programmable environments built on ClojureScript."
+featured = true
 tags = ["clojure", "clojurescript", "spreadsheet", "scittle", "lisp"]
 categories = ["programming", "clojure"]
 socialsharing = true
 +++
-
-# What If Every Spreadsheet cell were a little Lisp Machine? 🧮
-
-## Introduction
 
 Spreadsheets are among the most successful programming environments ever created. Millions of people use them to organize information, perform calculations, and build small applications. Some even run entire businesses with them. Others use them to calculate the family holiday budget. Both groups are one misplaced cell reference away from an interesting afternoon.
 
@@ -19,7 +18,7 @@ What if every cell could contain an expression in a general-purpose programming 
 
 The result would be something familiar in appearance but fundamentally different underneath: a self-contained programming environment built around ClojureScript.
 
-## Cells as expressions
+## Cells as expressions 🧮
 
 Consider a cell containing a project description:
 
@@ -55,7 +54,7 @@ No spreadsheet-specific functions are required. No separate formula syntax needs
 
 This doesn't eliminate complexity. It gives complexity a consistent model instead of spreading it across formulas, scripts, and increasingly mysterious worksheets.
 
-## Why ClojureScript?
+## Why ClojureScript? 🧠
 
 ClojureScript offers immutable data structures, collection-oriented functions, and a consistent way to express both data and computation.
 
@@ -78,7 +77,7 @@ The function editor would provide a place to develop reusable abstractions, whil
 
 The objective isn't to force every spreadsheet user to become a programmer. That would be an efficient way to lose most of the users. It's to make programming capabilities available through an interface people already understand.
 
-## A self-contained programming environment 🌐
+## A document that runs itself 🌐
 
 The application would be a standalone HTML document running directly in the browser. The browser wouldn't merely display an interface connected to a remote service; it would be the execution environment.
 
@@ -94,7 +93,7 @@ Nor does a single HTML file automatically guarantee offline operation. Required 
 
 The goal is simpler: the user's document, rather than a remote service, should be the primary unit of work.
 
-## Beyond the spreadsheet
+## Beyond the spreadsheet ✨
 
 The ambition isn't to rebuild Excel with parentheses.
 
@@ -106,8 +105,12 @@ If calculating a total requires understanding evaluation semantics and reading t
 
 The interesting part is that the ingredients already exist: Lisp, ClojureScript, browser-based execution, and portable HTML documents. The challenge is combining them into an environment that is coherent, practical, and pleasant to use.
 
-**What if a spreadsheet weren't a special-purpose formula engine, but a small, autonomous programming environment in which every cell was a ClojureScript expression?**
-
-Perhaps the result would be a spreadsheet that does more than calculate numbers. It could become a lightweight environment for exploring data, defining abstractions, and building small applications, without requiring an entire software infrastructure to support it.
+A spreadsheet that runs ClojureScript is not automatically a better spreadsheet. The test is whether someone can ask a question, inspect the data behind it, and change the answer without leaving the document. If that becomes easier, the language has earned its place. If it gives every user a compiler and no clearer view of their data, we have only moved the complexity somewhere more fashionable.
 
 And if nothing else, we'd have one fewer reason to name a worksheet `Final_v7_REAL_FINAL`.
+
+## References 🔗
+
+- [ClojureScript](https://clojurescript.org/)
+- [Scittle](https://github.com/babashka/scittle)
+- [Clojure reader](https://clojure.org/reference/reader)

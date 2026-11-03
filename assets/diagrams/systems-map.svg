@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 620" role="img" aria-labelledby="systems-map-title systems-map-desc">
+  <title id="systems-map-title">A schematic map of software systems and their interfaces</title>
+  <desc id="systems-map-desc">An editorial technical diagram connecting an execution system, an interface, and a margin note through a rust-coloured signal path.</desc>
+
+  <g fill="none" stroke="#d9d2c3" stroke-width="1">
+    <path d="M40 80H720M40 200H720M40 320H720M40 440H720M40 560H720"/>
+    <path d="M120 40V580M280 40V580M440 40V580M600 40V580"/>
+  </g>
+
+  <g fill="none" stroke="#24251f" stroke-width="1.6" stroke-linecap="square">
+    <rect x="88" y="142" width="230" height="148"/>
+    <rect x="430" y="262" width="230" height="148"/>
+    <path d="M318 216H374V336H430"/>
+    <path d="M203 290V406H430" stroke-dasharray="5 7"/>
+  </g>
+
+  <g font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="10" fill="#6b6a63" letter-spacing="1.5">
+    <text x="88" y="130">SYSTEM / 01</text>
+    <text x="430" y="250">INTERFACE / 02</text>
+    <text x="88" y="430">MARGIN NOTE</text>
+    <text x="40" y="600">FIELD NOTES / SYSTEMS</text>
+  </g>
+
+  <g font-family="'Newsreader', Georgia, serif" font-size="29" fill="#24251f">
+    <text x="112" y="190">execution</text>
+    <text x="112" y="226">history</text>
+    <text x="454" y="310">observable</text>
+    <text x="454" y="346">behaviour</text>
+  </g>
+
+  <g fill="none" stroke="#a45c36" stroke-width="1.4">
+    <circle cx="374" cy="216" r="7"/>
+    <circle cx="374" cy="336" r="7"/>
+    <path d="M374 223V329"/>
+  </g>
+  <circle cx="374" cy="216" r="2.8" fill="#a45c36"/>
+  <circle cx="374" cy="336" r="2.8" fill="#a45c36"/>
+
+  <g font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="10" fill="#8e4a2b" letter-spacing="1">
+    <text x="390" y="204">signal</text>
+    <text x="390" y="354">context</text>
+  </g>
+
+  <g fill="none" stroke="#77766f" stroke-width="1">
+    <path d="M66 142h-12M66 290h-12M430 262h-12M660 262h12M660 410h12"/>
+    <path d="M114 142v-10M262 142v-10M456 262v-10M634 262v-10"/>
+  </g>
+
+  <g font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="9" fill="#6b6a63" letter-spacing=".8">
+    <text x="54" y="258">run state</text>
+    <text x="680" y="258" transform="rotate(90 680 258)">context window</text>
+    <text x="52" y="158" transform="rotate(-90 52 158)">process</text>
+  </g>
+
+  <path d="M560 112h46M583 89v46" stroke="#a45c36" stroke-width="1.2"/>
+  <circle cx="583" cy="112" r="3" fill="#a45c36"/>
+</svg>

@@ -1,13 +1,15 @@
 {{ define "main" }}
   <header class="page-heading">
-    <p class="eyebrow">Esplora gli argomenti</p>
-    <h1>{{ .Title }}</h1>
+    <div class="page-heading__copy">
+      <p class="eyebrow">Explore topics</p>
+      <h1>{{ .Title }}</h1>
+    </div>
   </header>
   <ul class="term-list">
     {{ range .Data.Terms.Alphabetical }}
-      <li><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a><span>{{ .Count }}</span></li>
+      <li><a href="{{ .Page.RelPermalink }}"><span>{{ .Page.LinkTitle }}</span><span class="term-list__count">{{ .Count }}</span></a></li>
     {{ else }}
-      <li>Non ci sono ancora argomenti.</li>
+      <li class="empty-state">No topics yet.</li>
     {{ end }}
   </ul>
 {{ end }}
