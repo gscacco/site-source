@@ -226,4 +226,6 @@ The objective is not to replace the shell.
 
 It is to use the shell when its capabilities are actually needed, rather than making it an invisible dependency of every process execution.
 
+See also [First article on cronx](/post/cronx).
+
 [cronx on GitHub](https://github.com/gscacco/cronx)
