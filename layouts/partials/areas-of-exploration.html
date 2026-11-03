@@ -1,0 +1,31 @@
+{{ with hugo.Data.homepage.areas }}
+  <section class="recent-section" aria-labelledby="areas-heading">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Themes</p>
+        <h2 id="areas-heading">Areas of Exploration</h2>
+      </div>
+    </div>
+    <ol class="post-index">
+      {{ range $index, $area := . }}
+        <li class="post-row">
+          <span class="post-row__index" aria-hidden="true">{{ printf "%02d" (add $index 1) }}</span>
+          <div class="post-row__body">
+            <h3 class="post-row__title">{{ $area.title }}</h3>
+            <p class="post-row__summary">{{ $area.abstract }}</p>
+            <ul class="annotation-list" aria-label="Representative articles">
+              {{ range $area.starts }}
+                {{ with site.GetPage . }}
+                  <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+                {{ end }}
+              {{ end }}
+            </ul>
+            {{ with $area.collection }}
+              <p><a class="text-link" href="{{ .url | relLangURL }}">{{ .label }} <span aria-hidden="true">→</span></a></p>
+            {{ end }}
+          </div>
+        </li>
+      {{ end }}
+    </ol>
+  </section>
+{{ end }}

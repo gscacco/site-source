@@ -1,7 +1,7 @@
 {{ define "main" }}
   <header class="page-heading">
     <div class="page-heading__copy">
-      <p class="eyebrow">Explore topics</p>
+      <p class="eyebrow">{{ if eq .Data.Plural "series" }}Explore series{{ else }}Explore topics{{ end }}</p>
       <h1>{{ .Title }}</h1>
     </div>
   </header>
@@ -9,7 +9,7 @@
     {{ range .Data.Terms.Alphabetical }}
       <li><a href="{{ .Page.RelPermalink }}"><span>{{ .Page.LinkTitle }}</span><span class="term-list__count">{{ .Count }}</span></a></li>
     {{ else }}
-      <li class="empty-state">No topics yet.</li>
+      <li class="empty-state">{{ if eq .Data.Plural "series" }}No series yet.{{ else }}No topics yet.{{ end }}</li>
     {{ end }}
   </ul>
 {{ end }}

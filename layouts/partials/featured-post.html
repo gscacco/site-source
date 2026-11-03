@@ -1,7 +1,8 @@
 {{ $page := . }}
+{{ $rank := $page.Params.featured_rank | default 1 }}
 <section class="featured-essay" aria-labelledby="featured-heading">
   <div class="featured-essay__label">
-    <span class="eyebrow">Featured essay</span>
+    <span class="eyebrow">Selected essay</span>
     <span class="featured-essay__rule" aria-hidden="true"></span>
   </div>
   <div class="featured-essay__grid">
@@ -13,11 +14,14 @@
       <a class="button-link" href="{{ $page.RelPermalink }}">Read the essay <span aria-hidden="true">→</span></a>
     </div>
     <aside class="featured-essay__aside" aria-label="About this essay">
-      <p class="featured-essay__index">01</p>
-      <p class="featured-essay__note">A field note on interfaces, computation, and the quiet decisions that shape our tools.</p>
-      {{ with $page.Params.categories }}
+      <p class="featured-essay__index">{{ printf "%02d" $rank }}</p>
+      {{ with $page.Params.series }}
+        <p class="featured-essay__note">Part of the {{ range $index, $series := . }}{{ if $index }}, {{ end }}<a href="{{ "series/" | relLangURL }}{{ $series | urlize }}/">{{ $series | humanize | title }}</a>{{ end }} series.</p>
+      {{ end }}
+      {{ with $page.Params.topics }}
+        <p class="footer-label">Areas of exploration</p>
         <ul class="annotation-list">
-          {{ range . }}<li>{{ . }}</li>{{ end }}
+          {{ range . }}<li><a href="{{ "topics/" | relLangURL }}{{ . | urlize }}/">{{ . | humanize | title }}</a></li>{{ end }}
         </ul>
       {{ end }}
     </aside>

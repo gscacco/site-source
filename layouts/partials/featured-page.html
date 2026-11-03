@@ -1,11 +1,8 @@
 {{ $posts := where site.RegularPages "Section" "post" }}
-{{ $featured := false }}
-{{ with where $posts "Params.featured" true }}
-  {{ $featured = index . 0 }}
-{{ end }}
-{{ if not $featured }}
-  {{ with $posts }}
-    {{ $featured = index . 0 }}
-  {{ end }}
+{{ $featured := where $posts "Params.featured" true }}
+{{ if eq (len $featured) 0 }}
+  {{ $featured = first 1 $posts.ByDate.Reverse }}
+{{ else }}
+  {{ $featured = sort $featured "Params.featured_rank" }}
 {{ end }}
 {{ return $featured }}

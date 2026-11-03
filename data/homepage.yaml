@@ -1,0 +1,39 @@
+areas:
+  - title: "Programmable Spreadsheets"
+    abstract: "Can a spreadsheet become a programming environment rather than a formula grid? These articles explore cells as ClojureScript expressions, tables as structured data, and multiple representations of complex EDN values."
+    starts:
+      - "post/spreadsheet/calc.md"
+      - "post/spreadsheet/calc2.md"
+      - "post/spreadsheet/calc3.md"
+    collection:
+      label: "Explore the complete collection"
+      url: "/topics/programmable-environments/"
+
+  - title: "cronx and Job Scheduling"
+    abstract: "A small scheduler is a study in engineering boundaries: explicit configuration, safe process execution, durable history, and logs that explain what happened when jobs overlapped, failed, or were retried. The focus is predictable behaviour without unnecessary infrastructure."
+    starts:
+      - "post/cronx/cronx.md"
+      - "post/cronx/cronx2.md"
+      - "post/cronx/cronx3.md"
+    collection:
+      label: "Read the cronx series"
+      url: "/series/cronx/"
+
+  - title: "Clojure Programming and Tools"
+    abstract: "Clojure and ClojureScript make data and computation share a vocabulary. These articles follow that idea through sequence-oriented exercises, agent-based concurrency, EDN representation, and small programs designed to be inspected and changed."
+    starts:
+      - "post/clojure/tcp-server.md"
+      - "post/spreadsheet/calc3.md"
+      - "post/clojure/peuler1.md"
+    collection:
+      label: "Explore Clojure and data articles"
+      url: "/topics/programming-languages/"
+
+series:
+  - term: "programmable-spreadsheet"
+    title: "A Programmable Spreadsheet"
+    description: "From the spreadsheet as a programmable environment to structured tables and multiple views of EDN data."
+
+  - term: "cronx"
+    title: "Designing cronx"
+    description: "A small scheduler, from deliberate scope through safe process execution to operational visibility."

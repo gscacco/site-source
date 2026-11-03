@@ -3,6 +3,10 @@ date = "2026-06-20T14:00:00+02:00"
 draft = false
 title = "Making Scheduled Jobs Observable"
 description = "Making scheduled jobs observable through structured execution history, simple logs, and durable local state."
+featured = true
+featured_rank = 2
+topics = ["software-architecture", "systems-design"]
+series = ["cronx"]
 tags = ["cron", "go", "cronx", "task"]
 categories = ["programming", "go"]
 socialsharing = true
@@ -20,7 +24,7 @@ A scheduler that manages the lifecycle of jobs should also provide a consistent 
 
 **Observability should not be an additional feature layered on top of job execution. It should be part of the execution model itself.**
 
-This article is the third in a short series about cronx. The [first article]({{< relref "/post/cronx.md" >}}) described the design goals behind the project and the decision to keep its operational model small. The [second article]({{< relref "/post/cronx2.md" >}}) examined how cronx starts and controls processes, including direct process creation, process groups, and timeouts. This article builds on both and focuses on what happens after a job has been started: how its execution history and output can be inspected.
+This article is the third in a short series about cronx. The [first article]({{< relref "/post/cronx/cronx.md" >}}) described the design goals behind the project and the decision to keep its operational model small. The [second article]({{< relref "/post/cronx/cronx2.md" >}}) examined how cronx starts and controls processes, including direct process creation, process groups, and timeouts. This article builds on both and focuses on what happens after a job has been started: how its execution history and output can be inspected.
 
 ## Two different kinds of information 🧩
 
@@ -296,8 +300,8 @@ The test is not whether a scheduler has a log file or a database. It is whether 
 ## References 🔗
 
 - [cronx on GitHub](https://github.com/gscacco/cronx)
-- [cronx and the Value of Keeping Things Simple]({{< relref "/post/cronx.md" >}})
-- [Beyond Shell Commands: Designing Safer Process Execution]({{< relref "/post/cronx2.md" >}})
+- [cronx and the Value of Keeping Things Simple]({{< relref "/post/cronx/cronx.md" >}})
+- [Beyond Shell Commands: Designing Safer Process Execution]({{< relref "/post/cronx/cronx2.md" >}})
 - [SQLite](https://www.sqlite.org/)
 - [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339)
 - [Go `os/exec`](https://pkg.go.dev/os/exec)

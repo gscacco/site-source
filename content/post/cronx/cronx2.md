@@ -3,6 +3,8 @@ date = "2026-06-16T14:00:00+02:00"
 draft = false
 title = "Beyond Shell Commands: Designing Safer Process Execution"
 description = "Designing process execution without a shell, with explicit environments, process groups, and timeouts."
+topics = ["software-architecture", "systems-design"]
+series = ["cronx"]
 tags = ["cron", "go", "cronx", "task"]
 categories = ["programming", "go"]
 socialsharing = true
@@ -220,8 +222,8 @@ The rule of thumb is modest but useful: if you need a language, use a shell; if 
 ## References 🔗
 
 - [cronx on GitHub](https://github.com/gscacco/cronx)
-- [cronx and the Value of Keeping Things Simple]({{< relref "/post/cronx.md" >}})
-- [Making Scheduled Jobs Observable]({{< relref "/post/cronx3.md" >}})
+- [cronx and the Value of Keeping Things Simple]({{< relref "/post/cronx/cronx.md" >}})
+- [Making Scheduled Jobs Observable]({{< relref "/post/cronx/cronx3.md" >}})
 - [Go `os/exec`](https://pkg.go.dev/os/exec)
 - [OWASP: Command Injection](https://owasp.org/www-community/attacks/Command_Injection)
 - [Linux `setpgid(2)`](https://man7.org/linux/man-pages/man2/setpgid.2.html)

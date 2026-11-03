@@ -1,10 +1,11 @@
 {{ $project := . }}
-<a class="project-card" href="{{ $project.url }}" rel="noopener">
+{{ $isExternal := hasPrefix $project.url "http" }}
+<a class="project-card" href="{{ $project.url }}"{{ if $isExternal }} rel="noopener"{{ end }}>
   <span class="project-card__kicker">{{ $project.kicker }}</span>
   <span class="project-card__name">{{ $project.name }}</span>
   <span class="project-card__description">{{ $project.description }}</span>
   <span class="project-card__footer">
     <span>{{ $project.status }}</span>
-    <span aria-hidden="true">↗</span>
+    <span aria-hidden="true">{{ if $isExternal }}↗{{ else }}→{{ end }}</span>
   </span>
 </a>

@@ -1,13 +1,17 @@
 {{ define "main" }}
+  {{ $pages := .Pages }}
+  {{ if eq .Data.Plural "series" }}
+    {{ $pages = .Pages.ByDate }}
+  {{ end }}
   <header class="page-heading">
     <div class="page-heading__copy">
-      <p class="eyebrow">{{ if eq .Section "post" }}Archive{{ else }}Explore{{ end }}</p>
-      <h1>{{ .Title }}</h1>
+      <p class="eyebrow">{{ if eq .Data.Plural "series" }}Series{{ else if eq .Section "post" }}Archive{{ else }}Explore{{ end }}</p>
+      <h1>{{ if eq .Data.Plural "series" }}{{ .Title | title }}{{ else }}{{ .Title }}{{ end }}</h1>
       {{ with .Content }}<div class="page-intro">{{ . }}</div>{{ end }}
     </div>
   </header>
   <ol class="post-index">
-    {{ range $index, $page := (.Paginate .Pages).Pages }}
+    {{ range $index, $page := (.Paginate $pages).Pages }}
       {{ partial "post-row.html" (dict "page" $page "index" $index "showSummary" true) }}
     {{ else }}
       <li class="empty-state">No content to display.</li>

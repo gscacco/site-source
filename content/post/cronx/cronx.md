@@ -3,6 +3,8 @@ date = "2026-06-15T14:00:00+02:00"
 draft = false
 title = "cronx and the Value of Keeping Things Simple"
 description = "A small Go scheduler built around explicit configuration, local persistence, and a deliberately narrow scope."
+topics = ["software-architecture", "systems-design"]
+series = ["cronx"]
 tags = ["cron", "go", "cronx", "task"]
 categories = ["programming", "go"]
 socialsharing = true
@@ -92,7 +94,7 @@ Characters such as `;`, `|`, `$`, and `*` become ordinary argument content rathe
 
 This removes a class of accidental behaviour, but it does not create a sandbox. Jobs still run with the scheduler's operating-system identity and permissions. Predictability and isolation are different goals, and conflating them is how small tools acquire misleading security claims.
 
-The [next article]({{< relref "/post/cronx2.md" >}}) follows the execution path in detail, from `exec` to process groups and timeouts. Here the architectural point is enough: execution policy should be explicit rather than hidden in shell syntax.
+The [next article]({{< relref "/post/cronx/cronx2.md" >}}) follows the execution path in detail, from `exec` to process groups and timeouts. Here the architectural point is enough: execution policy should be explicit rather than hidden in shell syntax.
 
 ## Execution history is part of the system 🧾
 
@@ -123,7 +125,7 @@ The database and logs are also ordinary local files. They can be examined with s
 
 The underlying idea is simple: a system should not only execute tasks, but also leave enough evidence to explain its behaviour.
 
-That evidence has two forms, because execution metadata and process output answer different questions. The [third article]({{< relref "/post/cronx3.md" >}}) examines how cronx stores them, how retries appear in the history, and what happens when the scheduler itself stops before recording a result.
+That evidence has two forms, because execution metadata and process output answer different questions. The [third article]({{< relref "/post/cronx/cronx3.md" >}}) examines how cronx stores them, how retries appear in the history, and what happens when the scheduler itself stops before recording a result.
 
 ## Reliability without becoming a distributed system 🛠️
 
@@ -180,8 +182,8 @@ The goal is not to build the most powerful scheduler.
 ## References 🔗
 
 - [cronx on GitHub](https://github.com/gscacco/cronx)
-- [Beyond Shell Commands: Designing Safer Process Execution]({{< relref "/post/cronx2.md" >}})
-- [Making Scheduled Jobs Observable]({{< relref "/post/cronx3.md" >}})
+- [Beyond Shell Commands: Designing Safer Process Execution]({{< relref "/post/cronx/cronx2.md" >}})
+- [Making Scheduled Jobs Observable]({{< relref "/post/cronx/cronx3.md" >}})
 - [Go `os/exec`](https://pkg.go.dev/os/exec)
 - [SQLite](https://www.sqlite.org/)
 - [TOML](https://toml.io/)

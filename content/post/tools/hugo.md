@@ -4,6 +4,7 @@ draft = false
 title = "Hugo - Static Site Generator"
 slug = "hugo-static-site-generator"
 description = "Why static site generation with Hugo can replace the database-backed machinery of a traditional CMS."
+topics = ["software-architecture"]
 author = " G.Scacco"
 tags = ["hugo", "web"]
 categories = ["web"]

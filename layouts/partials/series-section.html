@@ -1,0 +1,30 @@
+{{ with hugo.Data.homepage.series }}
+  <section class="recent-section" aria-labelledby="series-heading">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Series</p>
+        <h2 id="series-heading">Read in sequence</h2>
+      </div>
+      <a class="text-link" href="{{ "series/" | relLangURL }}">All series <span aria-hidden="true">→</span></a>
+    </div>
+    <ol class="post-index">
+      {{ range $index, $item := . }}
+        {{ $term := index site.Taxonomies.series $item.term }}
+        {{ with $term }}
+          <li class="post-row">
+            <span class="post-row__index" aria-hidden="true">{{ printf "%02d" (add $index 1) }}</span>
+            <div class="post-row__body">
+              <h3 class="post-row__title"><a href="{{ "series/" | relLangURL }}{{ $item.term | urlize }}/">{{ $item.title }}</a></h3>
+              <p class="post-row__summary">{{ $item.description }}</p>
+              <ul class="annotation-list" aria-label="Articles in this series">
+                {{ range .Pages.ByDate }}
+                  <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+                {{ end }}
+              </ul>
+            </div>
+          </li>
+        {{ end }}
+      {{ end }}
+    </ol>
+  </section>
+{{ end }}
