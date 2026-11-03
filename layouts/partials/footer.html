@@ -1,11 +1,29 @@
 <footer class="site-footer">
-  <div class="container footer-inner">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <span class="footer-brand__name">{{ site.Title }}</span>
+      <p>{{ site.Params.description }}</p>
+    </div>
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <p class="footer-label">Sections</p>
+      <ul>
+        {{ range site.Menus.main }}
+          <li><a href="{{ .URL | relLangURL }}">{{ .Name }}</a></li>
+        {{ end }}
+      </ul>
+    </nav>
+    <div class="footer-links-block">
+      <p class="footer-label">Elsewhere</p>
+      <ul>
+        {{ range site.Menus.social }}
+          <li><a href="{{ .URL }}" rel="me">{{ .Name }}</a></li>
+        {{ end }}
+        <li><a href="{{ "index.xml" | relURL }}">RSS</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
     <span>© {{ now.Year }} {{ site.Params.author }}</span>
-    <ul class="footer-links">
-      {{ range site.Menus.social }}
-        <li><a href="{{ .URL }}" rel="me">{{ .Name }}</a></li>
-      {{ end }}
-      <li><a href="{{ "index.xml" | relURL }}">RSS</a></li>
-    </ul>
+    <span>Built with Hugo. Written in Markdown.</span>
   </div>
 </footer>

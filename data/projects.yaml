@@ -1,0 +1,11 @@
+- name: cronx
+  kicker: Go · SQLite · CLI
+  description: A small, local-first scheduler that treats process execution and observability as first-class concerns.
+  url: https://github.com/gscacco/cronx
+  status: Active
+
+- name: site-source
+  kicker: Hugo · Nix · CSS
+  description: The source of this publication, with a hand-built Hugo theme, editorial typography, and no frontend framework.
+  url: https://github.com/gscacco/site-source
+  status: Evolving

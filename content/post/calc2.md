@@ -2,16 +2,13 @@
 date = "2026-06-20T13:23:00+02:00"
 draft = false
 title = "From Spreadsheet Tables to Programmable Data"
+description = "Treating spreadsheet tables as structured ClojureScript data instead of a maze of cell references."
 tags = ["clojure", "clojurescript", "spreadsheet", "scittle", "lisp"]
 categories = ["programming", "clojure"]
 socialsharing = true
 +++
 
-# From Spreadsheet Tables to Programmable Data
-
-## Introduction
-
-Spreadsheets are excellent at organizing information into rows and columns. They are less convincing when a simple question turns into a maze of cell references, nested formulas, and increasingly creative uses of `VLOOKUP`.
+A table is one of the most useful things a spreadsheet can hold. The trouble starts when a simple question turns into a maze of cell references, nested formulas, and increasingly creative uses of `VLOOKUP`.
 
 Consider a familiar table:
 
@@ -26,7 +23,7 @@ A conventional spreadsheet encourages us to manipulate this information through 
 
 But there's another option: turn the table into structured ClojureScript data and work with the information directly.
 
-## From rows to data
+## From rows to data 🧾
 
 The first row contains the field names. Each subsequent row can become a map, and the entire table a vector of maps.
 
@@ -46,6 +43,8 @@ Given a spreadsheet range `A1:D5`, we can write:
 (def projects
   (rows->maps A1:D5))
 ```
+
+The conversion assumes that the first row contains unique field names and that every later row has the same number of cells. Those assumptions are reasonable for the table above; they are also the kind of thing a reusable function should make explicit.
 
 The result is structured data:
 
@@ -70,7 +69,7 @@ The result is structured data:
 
 Now we can refer to `:budget` rather than column C, or `:status` rather than remembering which column we put it in. The data has names that describe what it means, rather than coordinates that describe where it happens to live.
 
-## Ask the data
+## Ask the data 🔎
 
 Which projects are active?
 
@@ -114,7 +113,7 @@ Or generate a summary containing the number of projects and their combined budge
 
 Filtering, grouping, and aggregation are ordinary functions operating on ordinary data. No additional query language is needed, and no formula has to be copied down 200 rows while everyone hopes the references behave.
 
-## From data to computation
+## From data to computation ⚙️
 
 In a programmable spreadsheet, a cell could hold the original table, another could filter its records, and a third could calculate a summary.
 
@@ -131,7 +130,7 @@ The cell isn't restricted to storing a value or invoking a spreadsheet-specific 
 
 This is a small change in appearance, but a significant change in the computational model.
 
-## The grid is still useful
+## Where the grid still wins 🏁
 
 None of this requires replacing the spreadsheet with a database or an analytics platform. The grid remains a convenient interface for entering and inspecting information; ClojureScript provides a general-purpose language for transforming it.
 
@@ -139,4 +138,12 @@ Tables are still useful. They simply stop dictating every operation we can perfo
 
 The idea isn't to make spreadsheets more complicated by introducing programming for its own sake. It's to remove arbitrary boundaries between storing data, querying it, and defining reusable computations.
 
+When the table is the final artifact, a conventional spreadsheet is still the simpler tool. The argument is not that every worksheet should become a program; it is that a table should not become a maze merely because someone needs to ask a second question of it.
+
 **The grid provides the data. The language provides the power. And ideally, neither requires a 47th worksheet named `Summary_Final_v3`.**
+
+## References 🔗
+
+- [ClojureScript](https://clojurescript.org/)
+- [Clojure `zipmap`](https://clojuredocs.org/clojure.core/zipmap)
+- [Clojure `group-by`](https://clojuredocs.org/clojure.core/group-by)

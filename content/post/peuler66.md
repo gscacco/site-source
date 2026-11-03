@@ -1,25 +1,26 @@
 +++
 date = "2015-06-15T14:31:23+02:00"
 draft = true
-title = "Project Euler - Problema 66"
+title = "Project Euler - Problem 66"
+slug = "project-euler-problema-66"
+description = "A draft exploration of Pell's equation and Project Euler problem 66."
 author = " G.Scacco"
 tags = ["clojure", "project euler"]
 categories = ["programming", "clojure"]
 socialsharing = true
 +++
 
-## Definizione del problema
+## Problem statement 🧩
 
-La traduzione in italiano del [Problema 66] è la seguente:
+The [problem](https://projecteuler.net/problem=66) is stated as follows:
 
-
-> Consideriamo le equazioni Diofantine quadratiche della forma:
+> Consider the quadratic Diophantine equations of the form:
 > $$x^2-D\cdot y^2 = 1$$
-> Per esempio, quando \\(D=13\\), la minima soluzione in \\(x\\) è \\(649^2 – 13\cdot 180^2 = 1\\).
+> For example, when \\(D=13\\), the minimal solution in \\(x\\) is \\(649^2 – 13\cdot 180^2 = 1\\).
 > 
-> Si può assumere che non esistono soluzioni tra gli interi positivi quando D è un quadrato.
+> It can be assumed that there are no solutions in positive integers when \\(D\\) is a square.
 > 
-> Cercando le soluzioni minime in \\(x\\) per \\(D = \\{ 2, 3, 5, 6, 7 \\}\\), otteniamo:
+> By finding the minimal solutions in \\(x\\) for \\(D = \\{ 2, 3, 5, 6, 7 \\}\\), we get:
 >
 > * \\(3^2 – 2\cdot 2^2 = 1\\)
 > * \\(2^2 – 3\cdot 2^2 = 1\\)
@@ -27,8 +28,11 @@ La traduzione in italiano del [Problema 66] è la seguente:
 > * \\(5^2 – 6\cdot 2^2 = 1\\)
 > * \\(8^2 – 7\cdot 3^2 = 1\\)
 
-> Quindi, considerando le soluzioni minime in \\(x\\) per \\(D \leq 7\\), il più grande \\(x\\) si ottiene quando \\(D=5\\).
+> Therefore, by considering the minimal solutions in \\(x\\) for \\(D \leq 7\\), the largest \\(x\\) is obtained when \\(D=5\\).
 
-> Cercate il valore di \\(D \leq 1000\\) nelle soluzioni minime di \\(x\\) per il quale si ottiene il massimo valore di \\(x\\).
+> Find the value of \\(D \leq 1000\\) for which the minimal solution in \\(x\\) is largest.
 
-[Problema 66]:https://projecteuler.net/problem=66
+## References 🔗
+
+- [Project Euler problem 66](https://projecteuler.net/problem=66)
+- [Pell's equation](https://en.wikipedia.org/wiki/Pell%27s_equation)

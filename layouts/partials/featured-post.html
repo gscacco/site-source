@@ -1,0 +1,25 @@
+{{ $page := . }}
+<section class="featured-essay" aria-labelledby="featured-heading">
+  <div class="featured-essay__label">
+    <span class="eyebrow">Featured essay</span>
+    <span class="featured-essay__rule" aria-hidden="true"></span>
+  </div>
+  <div class="featured-essay__grid">
+    <div class="featured-essay__copy">
+      <h2 id="featured-heading"><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h2>
+      {{ with $page.Params.subtitle }}<p class="featured-essay__subtitle">{{ . }}</p>{{ end }}
+      <p class="featured-essay__summary">{{ $page.Description | default ($page.Summary | plainify) | truncate 280 }}</p>
+      {{ partial "post-meta.html" $page }}
+      <a class="button-link" href="{{ $page.RelPermalink }}">Read the essay <span aria-hidden="true">→</span></a>
+    </div>
+    <aside class="featured-essay__aside" aria-label="About this essay">
+      <p class="featured-essay__index">01</p>
+      <p class="featured-essay__note">A field note on interfaces, computation, and the quiet decisions that shape our tools.</p>
+      {{ with $page.Params.categories }}
+        <ul class="annotation-list">
+          {{ range . }}<li>{{ . }}</li>{{ end }}
+        </ul>
+      {{ end }}
+    </aside>
+  </div>
+</section>

@@ -1,20 +1,44 @@
 {{ define "main" }}
   <article class="article">
     <header class="article-header">
-      <p class="eyebrow">{{ with .Section }}{{ . | humanize }}{{ end }}</p>
+      <p class="eyebrow">{{ with .Section }}{{ . | humanize }}{{ end }}{{ with .Params.categories }}{{ with index . 0 }} / {{ . | humanize }}{{ end }}{{ end }}</p>
       <h1>{{ .Title }}</h1>
+      {{ with .Params.subtitle }}<p class="article-subtitle">{{ . }}</p>{{ else }}{{ with .Params.description }}<p class="article-subtitle">{{ . }}</p>{{ end }}{{ end }}
       {{ partial "post-meta.html" . }}
     </header>
-    <div class="content">
+
+    {{ $showToc := or .Params.showToc (gt .WordCount 700) }}
+    {{ if and $showToc .TableOfContents }}
+      <details class="toc" open>
+        <summary>Contents</summary>
+        {{ .TableOfContents }}
+      </details>
+    {{ end }}
+
+    <div class="article-body content">
       {{ .Content }}
     </div>
-    {{ with .Params.categories }}
-      <div class="article-categories">Categorie: {{ range $index, $category := . }}{{ if $index }}, {{ end }}<a href="{{ "categories/" | relLangURL }}{{ $category | urlize }}/">{{ $category }}</a>{{ end }}</div>
-    {{ end }}
-    {{ if and (not .Draft) site.Config.Services.Disqus.Shortname }}
-      <section class="comments" aria-label="Commenti">
-        {{ template "_internal/disqus.html" . }}
-      </section>
-    {{ end }}
+
+    <footer class="article-footer">
+      {{ with .Params.categories }}
+        <div class="article-footer__taxonomy">
+          <span class="footer-label">Filed under</span>
+          <ul class="annotation-list">
+            {{ range . }}<li><a href="{{ "categories/" | relLangURL }}{{ . | urlize }}/">{{ . }}</a></li>{{ end }}
+          </ul>
+        </div>
+      {{ end }}
+
+      <nav class="article-nav" aria-label="Article navigation">
+        {{ partial "article-nav.html" . }}
+      </nav>
+
+      {{ if and (not .Draft) site.Config.Services.Disqus.Shortname }}
+        <section class="comments" aria-label="Comments">
+          <p class="eyebrow">Discussion</p>
+          {{ template "_internal/disqus.html" . }}
+        </section>
+      {{ end }}
+    </footer>
   </article>
 {{ end }}

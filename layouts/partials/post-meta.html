@@ -1,7 +1,10 @@
-<p class="post-meta">
-  <time datetime='{{ .Date.Format "2006-01-02" }}'>{{ .Date.Format "02/01/2006" }}</time>
-  {{ with .Params.author }}<span> · {{ trim . " \t\n\r" }}</span>{{ end }}
+<div class="post-meta">
+  <time datetime='{{ .Date.Format "2006-01-02" }}'>{{ .Date.Format "January 2, 2006" }}</time>
+  <span class="post-meta__sep" aria-hidden="true">·</span>
+  <span>{{ .ReadingTime }} min read</span>
+  {{ with .Params.author }}<span class="post-meta__sep" aria-hidden="true">·</span><span>{{ trim . " \t\n\r" }}</span>{{ end }}
   {{ with .Params.tags }}
-    <span class="meta-tags"> · {{ range $index, $tag := . }}{{ if $index }}, {{ end }}<a href="{{ "tags/" | relLangURL }}{{ $tag | urlize }}/">{{ $tag }}</a>{{ end }}</span>
+    <span class="post-meta__sep" aria-hidden="true">·</span>
+    <span class="meta-tags">{{ range $index, $tag := . }}{{ if $index }}, {{ end }}<a href="{{ "tags/" | relLangURL }}{{ $tag | urlize }}/">{{ $tag }}</a>{{ end }}</span>
   {{ end }}
-</p>
+</div>

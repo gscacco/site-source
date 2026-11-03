@@ -1,0 +1,14 @@
+{{ $src := .Destination }}
+{{ $alt := .Text }}
+{{ $title := .Title }}
+{{ $url := $src }}
+{{ $resource := .Page.Resources.GetMatch $src }}
+{{ if $resource }}
+  {{ $url = $resource.RelPermalink }}
+{{ else if not (strings.HasPrefix $src "http") }}
+  {{ $url = $src | relURL }}
+{{ end }}
+<figure class="figure">
+  <img src="{{ $url }}" alt="{{ $alt }}" loading="lazy" decoding="async"{{ with $resource }}{{ if ne .MediaType.SubType "svg" }} width="{{ .Width }}" height="{{ .Height }}"{{ end }}{{ end }}>
+  {{ with $title }}<figcaption class="figure__caption"><span class="figure__caption-text">{{ . | markdownify }}</span></figcaption>{{ end }}
+</figure>

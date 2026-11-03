@@ -2,18 +2,15 @@
 date = "2026-06-20T14:00:00+02:00"
 draft = false
 title = "Making Scheduled Jobs Observable"
+description = "Making scheduled jobs observable through structured execution history, simple logs, and durable local state."
 tags = ["cron", "go", "cronx", "task"]
 categories = ["programming", "go"]
 socialsharing = true
 +++
 
-# Making Scheduled Jobs Observable
+An execution can fail before a process exists. cronx may skip an overlapping run, fail to spawn an executable, or lose power halfway through an upload. A log file alone gives you part of the story; a status column gives you another part. Neither is enough by itself.
 
-## Introduction
-
-A scheduled job can fail in many different ways.
-It may never start, terminate with an error, exceed its execution timeout, or complete successfully after several attempts. Sometimes the scheduler itself may stop unexpectedly, leaving the outcome of an execution uncertain.
-The difficult part is not necessarily detecting that something went wrong. It is understanding what happened.
+A scheduled job may also terminate with an error, exceed its execution timeout, or complete successfully after several attempts. Sometimes the scheduler itself stops unexpectedly, leaving the outcome of an execution uncertain. The difficult part is not necessarily detecting that something went wrong. It is understanding what happened.
 
 Traditional scheduling tools are primarily concerned with triggering commands. Once a command has been started, its execution and output are often left to other mechanisms: system logs, redirected files, monitoring tools, or external scripts.
 
@@ -23,7 +20,9 @@ A scheduler that manages the lifecycle of jobs should also provide a consistent 
 
 **Observability should not be an additional feature layered on top of job execution. It should be part of the execution model itself.**
 
-## Two different kinds of information
+This article is the third in a short series about cronx. The [first article]({{< relref "/post/cronx.md" >}}) described the design goals behind the project and the decision to keep its operational model small. The [second article]({{< relref "/post/cronx2.md" >}}) examined how cronx starts and controls processes, including direct process creation, process groups, and timeouts. This article builds on both and focuses on what happens after a job has been started: how its execution history and output can be inspected.
+
+## Two different kinds of information 🧩
 
 When investigating a scheduled job, there are two fundamentally different questions:
 
@@ -49,9 +48,15 @@ cronx deliberately separates these responsibilities:
 
 Each mechanism has a specific purpose, and neither needs to become a general-purpose observability platform.
 
-## Execution history as structured data
+This separation extends the execution model described in the second article. Controlling a process is necessary, but it does not by itself explain the outcome of an execution.
+
+{{< diagram name="cronx-observability" number="1" wide="true" caption="Execution history records what happened; the shared log records what the process said. The run identifier connects the two without turning either into a general-purpose monitoring system." >}}
+
+## Execution history as structured data 🧾
 
 The first requirement is to make every execution identifiable.
+
+The first article identified execution history as one of cronx's core design choices. Making each attempt identifiable is what allows that history to answer practical questions rather than merely record that a job was triggered.
 
 cronx records each execution attempt in a local SQLite database. Every attempt receives its own identifier and is associated with a job.
 
@@ -92,15 +97,15 @@ cronx represents these outcomes through explicit statuses:
 
 The history therefore describes what actually happened, not simply whether a command returned zero.
 
-## An execution is not necessarily a single attempt
+{{< callout type="context" title="History is not a dashboard" >}}
+The purpose of these records is to explain behaviour, not to turn cronx into a monitoring platform. Each status is a compact answer to a specific operational question.
+{{< /callout >}}
 
-Retries introduce another interesting aspect.
+## An execution is not necessarily a single attempt 🔁
 
-Suppose a backup operation fails because a remote resource is temporarily unavailable. The scheduler retries the operation, and the second attempt succeeds.
+Retries complicate that picture.
 
-If we only record the final outcome, the execution appears successful.
-
-But this hides useful information: the first attempt failed, and the system needed a retry.
+Suppose a backup fails once, is retried, fails again, and then succeeds on the next scheduled execution. If we only record the final outcome, the job looks healthy. The history tells a different story.
 
 cronx records every attempt separately.
 
@@ -115,13 +120,11 @@ ID  JOB     ATTEMPT  STATUS     DURATION  EXIT
 
 Each attempt has its own identifier, status, duration, and associated output.
 
-This provides a more accurate picture of the execution lifecycle.
-
-It also makes it possible to distinguish between a job that normally succeeds and one that frequently fails before eventually completing.
+Here the newest record (ID 12) belongs to a fresh execution that succeeded on its first attempt. IDs 10 and 11 show a previous execution that needed two attempts and still failed. The recovery is visible, but so is the instability that preceded it. Keeping attempts separate makes it possible to distinguish a job that normally succeeds from one that frequently fails before eventually completing.
 
 The distinction becomes particularly useful when investigating intermittent problems.
 
-## Logs should remain simple
+## Logs should remain simple 🪵
 
 Structured execution history does not replace process output.
 
@@ -154,7 +157,7 @@ The result is a relatively simple logging model that remains compatible with ord
 
 There is one shared file rather than a separate log file for every job or execution.
 
-## History and logs are complementary views
+## History and logs are complementary views 🔍
 
 Having two information sources is useful only if they can be inspected independently and related when necessary.
 
@@ -198,9 +201,9 @@ The command reads the log file directly. It does not need to open the SQLite dat
 
 This separation also means that the log can be inspected using ordinary tools such as `grep`, `tail`, and other command-line utilities.
 
-## Persistence matters when the scheduler stops
+## Persistence matters when the scheduler stops 💾
 
-Observability becomes more interesting when the scheduler itself fails.
+The harder case is when the scheduler itself fails.
 
 Consider what happens if the machine loses power or the scheduler process is terminated unexpectedly while a job is running.
 
@@ -224,7 +227,9 @@ The recovery mechanism is primarily intended for situations where the scheduler 
 
 The objective is not to pretend that every failure can be recovered automatically. It is to ensure that the recorded history remains truthful.
 
-## Persistence without an external database
+Once the lifecycle is clear, the remaining question is where to keep it.
+
+## Why SQLite is enough here 🗄️
 
 SQLite is a natural fit for this architecture.
 
@@ -238,7 +243,7 @@ The database contains three main structures:
 - `job_state`: a compact representation of the latest outcome of each job.
 - `scheduler_lease`: information identifying the scheduler currently controlling the state.
 
-The `job_state` table is particularly interesting.
+The `job_state` table exists for a different reason.
 
 The execution history is the authoritative record of what happened, but frequently querying the entire history just to retrieve the latest outcome would be unnecessary.
 
@@ -250,7 +255,7 @@ Timestamps are stored in UTC using RFC 3339, independently of the timezone used 
 
 This avoids ambiguity when comparing executions produced on machines configured with different local timezones.
 
-## Observability needs boundaries too
+## Observability needs boundaries too 🧱
 
 A history database and a log file can grow indefinitely.
 
@@ -274,22 +279,25 @@ Without an explicit history limit, execution records are retained indefinitely. 
 
 This makes the storage behaviour explicit rather than imposing an arbitrary retention policy on every deployment.
 
-## Conclusion
+## A truthful history 🧭
 
-A job scheduler is often considered reliable when it executes commands at the right time.
+Reliability is usually measured at the moment a command starts. That is too early.
 
-But execution alone is not enough.
+A scheduler that only reports success has no way to distinguish a clean run from a lucky one.
 
-When something goes wrong, the ability to understand what happened becomes just as important as the ability to trigger the original task.
+cronx keeps execution history and process output separate, then connects them through a common execution identifier. SQLite records what the scheduler knows; the log preserves what the process said. The command-line interface gives both a place to meet.
 
-cronx approaches this problem by keeping execution history and process output separate, while connecting them through a common execution identifier.
-
-SQLite provides structured and persistent information about every attempt. A shared log file preserves the output generated by the processes. A small command-line interface makes both accessible without requiring an additional monitoring infrastructure.
-
-The interesting point is not the use of SQLite or the choice of a single log file. It is the decision to make observability part of the scheduler's basic responsibilities.
+What matters is not the use of SQLite or the choice of a single log file. It is the decision to make observability part of the scheduler's basic responsibilities, even when the scheduler is the component that failed.
 
 **A system is easier to operate when its history explains its behaviour, rather than forcing someone to reconstruct that behaviour from scattered log messages.**
 
-This principle applies well beyond job schedulers. Any application that manages external processes, asynchronous operations, or long-running tasks benefits from treating execution history as a first-class part of its architecture.
+The test is not whether a scheduler has a log file or a database. It is whether someone can answer “what happened?” without reconstructing the answer from unrelated messages. That is a design requirement, not a feature.
 
-[cronx on GitHub](https://github.com/gscacco/cronx)
+## References 🔗
+
+- [cronx on GitHub](https://github.com/gscacco/cronx)
+- [cronx and the Value of Keeping Things Simple]({{< relref "/post/cronx.md" >}})
+- [Beyond Shell Commands: Designing Safer Process Execution]({{< relref "/post/cronx2.md" >}})
+- [SQLite](https://www.sqlite.org/)
+- [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339)
+- [Go `os/exec`](https://pkg.go.dev/os/exec)

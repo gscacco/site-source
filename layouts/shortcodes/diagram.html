@@ -1,0 +1,15 @@
+{{ $name := strings.TrimSuffix ".svg" (.Get "name") }}
+{{ $caption := .Get "caption" }}
+{{ $number := .Get "number" }}
+{{ $wide := eq (.Get "wide") "true" }}
+{{ $resource := resources.Get (printf "diagrams/%s.svg" $name) }}
+{{ if not $resource }}{{ errorf "Diagram %q not found in assets/diagrams" $name }}{{ end }}
+<figure class="figure figure--diagram{{ if $wide }} figure--wide{{ end }}">
+  {{ $resource.Content | safeHTML }}
+  {{ if or $caption $number }}
+    <figcaption class="figure__caption">
+      {{ with $number }}<span class="figure__number">Fig. {{ . }}</span>{{ end }}
+      {{ with $caption }}<span class="figure__caption-text">{{ . | markdownify }}</span>{{ end }}
+    </figcaption>
+  {{ end }}
+</figure>

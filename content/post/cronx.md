@@ -2,14 +2,13 @@
 date = "2026-06-15T14:00:00+02:00"
 draft = false
 title = "cronx and the Value of Keeping Things Simple"
+description = "A small Go scheduler built around explicit configuration, local persistence, and a deliberately narrow scope."
 tags = ["cron", "go", "cronx", "task"]
 categories = ["programming", "go"]
 socialsharing = true
 +++
 
-# cronx and the Value of Keeping Things Simple
-
-## Introduction
+Consider a backup scheduled for 3 AM. At 3:05 it is still running, and the next scheduler tick is due. Does the second run start? Does it wait? Does it get discarded? The command itself says nothing about the answer.
 
 Scheduled tasks are one of those things that seem deceptively simple. Run a command at a particular time, repeat it periodically, and make sure it finishes.
 
@@ -23,7 +22,7 @@ But not every scheduling problem needs a distributed platform.
 
 **cronx started with a different question: how much functionality can we add while keeping the operational model as simple as possible?**
 
-## The cost of unnecessary infrastructure
+## The cost of unnecessary infrastructure 🧱
 
 A scheduler should not become a project of its own.
 
@@ -46,7 +45,9 @@ This separation is intentional. Process supervision is an operating system conce
 
 The result is a tool that can be copied to a machine, configured, started, and inspected without introducing additional infrastructure.
 
-## Configuration as an explicit contract
+{{< diagram name="cronx-architecture" number="1" wide="true" caption="cronx keeps the scheduler local: one configuration file, one history database, one shared log, and a CLI that can inspect both stores." >}}
+
+## Configuration as an explicit contract 📜
 
 A scheduler needs to know two things about every job: when it should run and what it should execute.
 
@@ -75,7 +76,7 @@ A job can have its own timeout, retry strategy, working directory, environment v
 
 This is important because scheduling and execution are different concerns.
 
-Knowing that a task should start at 3 AM does not tell us what should happen if it is still running at 3:05 AM. Should another instance start? Should the new execution be discarded? Should it wait?
+Knowing that a task should start at 3 AM does not tell us what should happen if it is still running at 3:05 AM. The overlap policy makes that decision explicit.
 
 These decisions should be explicit rather than left to accidental behaviour.
 
@@ -83,33 +84,17 @@ cronx validates the entire configuration before starting anything, reporting con
 
 The configuration file also remains the source of truth. The scheduler reads it but never modifies it.
 
-## Predictability is a security feature
+## Predictability is a security feature 🔒
 
-One of the most important design decisions concerns how commands are executed.
+One design decision shapes almost everything else: cronx does not hand command strings to a shell. It passes the executable and its arguments separately to the operating system, requires an absolute path, and gives each job a minimal environment.
 
-Traditional shell-based scheduling often relies on command strings. This is convenient, but it also introduces an additional interpretation layer.
+Characters such as `;`, `|`, `$`, and `*` become ordinary argument content rather than instructions for another interpreter. Each job also runs in its own process group, so a timeout can stop the process tree instead of only the process that happened to be started first.
 
-A command containing spaces, quotes, pipes, variable substitutions, or other shell metacharacters can have a meaning different from what its author intended.
+This removes a class of accidental behaviour, but it does not create a sandbox. Jobs still run with the scheduler's operating-system identity and permissions. Predictability and isolation are different goals, and conflating them is how small tools acquire misleading security claims.
 
-cronx avoids this ambiguity.
+The [next article]({{< relref "/post/cronx2.md" >}}) follows the execution path in detail, from `exec` to process groups and timeouts. Here the architectural point is enough: execution policy should be explicit rather than hidden in shell syntax.
 
-A job is executed directly through the operating system's process API. The executable and its arguments are passed as separate values, without invoking a shell.
-
-The executable must be specified using an absolute path, and arguments are passed verbatim.
-
-This means that characters such as `;`, `|`, `$`, and `*` are treated as ordinary argument content rather than instructions to be interpreted.
-
-The execution environment is also deliberately restricted. Jobs do not inherit the scheduler's environment variables. They receive a minimal environment and must explicitly declare any additional variables they need.
-
-Each job runs in its own process group, allowing timeouts and scheduler shutdowns to terminate the processes started by that job rather than leaving background processes behind.
-
-These decisions do not turn cronx into a sandbox. Jobs still run with the operating-system identity and filesystem permissions of the scheduler.
-
-The objective is more modest, but important: make execution behaviour explicit, reduce unintended interactions, and avoid introducing unnecessary interpretation mechanisms.
-
-Predictability is not a substitute for isolation, but it is a useful foundation for secure execution.
-
-## Execution history is part of the system
+## Execution history is part of the system 🧾
 
 Another important distinction between a basic scheduler and a more reliable one is the ability to understand what happened after a job was triggered.
 
@@ -138,7 +123,9 @@ The database and logs are also ordinary local files. They can be examined with s
 
 The underlying idea is simple: a system should not only execute tasks, but also leave enough evidence to explain its behaviour.
 
-## Reliability without becoming a distributed system
+That evidence has two forms, because execution metadata and process output answer different questions. The [third article]({{< relref "/post/cronx3.md" >}}) examines how cronx stores them, how retries appear in the history, and what happens when the scheduler itself stops before recording a result.
+
+## Reliability without becoming a distributed system 🛠️
 
 Even a local scheduler needs to deal with failure.
 
@@ -158,7 +145,7 @@ Configuration changes can also be applied without restarting the scheduler. Send
 
 None of these mechanisms requires a distributed architecture. They are local coordination problems, and a local solution is sufficient for the intended use cases.
 
-## A small tool with a deliberate scope
+## A small tool with a deliberate scope 🎯
 
 There is a temptation in software development to keep adding features until a small tool gradually becomes a platform.
 
@@ -174,7 +161,7 @@ Nix is available as an optional development and packaging environment, providing
 
 The project is still evolving, and its current 0.5.0 release should be considered an early release. Nevertheless, its core design is already usable for personal and single-machine deployments.
 
-## Conclusion
+## Where the complexity belongs 🧭
 
 The interesting part of building a small scheduler is not implementing another cron expression parser.
 
@@ -182,12 +169,19 @@ It is deciding where complexity belongs.
 
 Some complexity is unavoidable. Jobs fail, processes overlap, configurations become invalid, and systems restart. Pretending these problems do not exist does not make a scheduler simpler; it merely makes its behaviour less predictable.
 
-The alternative is to address these problems explicitly, while resisting the temptation to introduce infrastructure that does not solve a real requirement.
+The alternative is to address them explicitly, while resisting the temptation to introduce infrastructure that does not solve a real requirement. cronx does that locally: explicit configuration, direct process execution, durable history, and a CLI that can inspect the result.
 
-cronx follows this principle by combining a simple configuration model, direct process execution, local persistence, and an inspectable command-line interface.
+A local scheduler is not a lesser scheduler. It is a different scope with different obligations. The failure modes should fit on one machine, and the tools for investigating them should fit there too.
 
 The goal is not to build the most powerful scheduler.
 
 **It is to build a scheduler that does what it is supposed to do, makes its behaviour understandable, and does not require an infrastructure project to keep it running.**
 
-[cronx on GitHub](https://github.com/gscacco/cronx)
+## References 🔗
+
+- [cronx on GitHub](https://github.com/gscacco/cronx)
+- [Beyond Shell Commands: Designing Safer Process Execution]({{< relref "/post/cronx2.md" >}})
+- [Making Scheduled Jobs Observable]({{< relref "/post/cronx3.md" >}})
+- [Go `os/exec`](https://pkg.go.dev/os/exec)
+- [SQLite](https://www.sqlite.org/)
+- [TOML](https://toml.io/)

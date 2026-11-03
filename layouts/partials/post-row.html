@@ -1,0 +1,14 @@
+{{ $page := .page }}
+{{ $index := .index }}
+{{ $showSummary := .showSummary | default true }}
+{{ $summary := $page.Description | default ($page.Summary | plainify) | truncate 190 }}
+<li class="post-row">
+  <span class="post-row__index" aria-hidden="true">{{ printf "%02d" (add $index 1) }}</span>
+  <div class="post-row__body">
+    <h2 class="post-row__title"><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h2>
+    {{ with $page.Params.subtitle }}<p class="post-row__subtitle">{{ . }}</p>{{ end }}
+    {{ partial "post-meta.html" $page }}
+    {{ if $showSummary }}<p class="post-row__summary">{{ $summary }}</p>{{ end }}
+    <a class="text-link" href="{{ $page.RelPermalink }}">Read more <span aria-hidden="true">→</span></a>
+  </div>
+</li>

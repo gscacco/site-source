@@ -1,0 +1,8 @@
+{{ $title := .Get "title" | default "terminal" }}
+<figure class="terminal">
+  <div class="terminal__bar">
+    <span class="terminal__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="terminal__title">{{ $title }}</span>
+  </div>
+  <pre><code>{{ .Inner | strings.TrimSpace | htmlEscape | safeHTML }}</code></pre>
+</figure>
