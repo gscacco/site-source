@@ -5,7 +5,7 @@ title = "Making Scheduled Jobs Observable"
 tags = ["cron", "go", "cronx", "task"]
 categories = ["programming", "go"]
 socialsharing = true
-++
++++
 
 # Making Scheduled Jobs Observable
 
