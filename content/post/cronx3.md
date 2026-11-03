@@ -12,9 +12,7 @@ socialsharing = true
 ## Introduction
 
 A scheduled job can fail in many different ways.
-
 It may never start, terminate with an error, exceed its execution timeout, or complete successfully after several attempts. Sometimes the scheduler itself may stop unexpectedly, leaving the outcome of an execution uncertain.
-
 The difficult part is not necessarily detecting that something went wrong. It is understanding what happened.
 
 Traditional scheduling tools are primarily concerned with triggering commands. Once a command has been started, its execution and output are often left to other mechanisms: system logs, redirected files, monitoring tools, or external scripts.
