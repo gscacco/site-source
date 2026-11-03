@@ -1,7 +1,7 @@
 +++
 date = "2026-06-16T14:00:00+02:00"
 draft = false
-title = "cronx and the Value of Keeping Things Simple"
+title = "Beyond Shell Commands: Designing Safer Process Execution"
 tags = ["cron", "go", "cronx", "task"]
 categories = ["programming", "go"]
 socialsharing = true
