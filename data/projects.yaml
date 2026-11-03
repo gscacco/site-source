@@ -1,23 +1,23 @@
 - name: cronx
   kicker: Go · SQLite · CLI
-  description: A small, local-first scheduler that treats process execution and observability as first-class concerns.
-  url: https://github.com/gscacco/cronx
+  description: cronx is a small, local-first scheduler built around explicit configuration, safe process execution, durable history, and observability. It explores how far a single-machine tool can go without turning scheduling into an infrastructure project.
+  url: /series/cronx/
   status: Active
 
 - name: calc
   kicker: ClojureScript · Scittle · Spreadsheet
-  description: A speculative spreadsheet environment where cells evaluate ClojureScript expressions and structured data can be viewed as tables, trees, or text.
+  description: calc asks what a spreadsheet becomes when cells contain ClojureScript expressions rather than formulas. It treats tables as structured data and gives the same underlying values multiple views.
   url: /series/programmable-spreadsheet/
   status: Experiment
 
 - name: tools
   kicker: Hugo · Nix · CSS
-  description: The hand-built Hugo and Nix tooling behind this publication, with editorial typography and no frontend framework.
-  url: https://github.com/gscacco/site-source
+  description: Tools documents the software behind this publication, from Hugo static generation and reproducible Nix builds to a hand-built editorial interface with no frontend framework.
+  url: /tags/hugo/
   status: Evolving
 
 - name: Clojure Programming
   kicker: Clojure · EDN · Project Euler
-  description: Clojure and ClojureScript experiments, from sequence exercises and EDN data models to agent-based concurrency.
+  description: Clojure and ClojureScript experiments spanning sequence-oriented exercises, EDN representation, agent-based concurrency, and small programs designed to be inspected and changed.
   url: /topics/programming-languages/
   status: Ongoing

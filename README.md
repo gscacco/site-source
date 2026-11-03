@@ -151,6 +151,8 @@ Diagrams should be stored in `assets/diagrams/` as SVG files with `<title>` and 
 
 The `/projects/` page and the homepage section read from `data/projects.yaml`. Each entry has `name`, `kicker`, `description`, `url`, and `status`. The page is defined in `content/projects/_index.md` and uses `layouts/projects/list.html`.
 
+Project URLs may point to internal series, topic, or tag collections. Their introductory abstracts live in the corresponding `_index.md` files under `content/series/`, `content/topics/`, or `content/tags/`.
+
 ## Project structure
 
 - `content/post/spreadsheet/`: articles on spreadsheets as programmable environments.
