@@ -28,7 +28,7 @@
   {{ end }}
 
   {{ with $lead }}
-    <div id="featured">{{ partial "featured-post.html" . }}</div>
+    <div id="featured">{{ partial "featured-post.html" (dict "page" . "eyebrow" "Latest essay") }}</div>
   {{ end }}
 
   {{ with $alsoSelected }}
@@ -51,9 +51,11 @@
   {{ partial "series-section.html" . }}
 
   {{ $posts := where site.RegularPages "Section" "post" }}
+  {{ $highlighted := slice }}
+  {{ range $featured }}{{ $highlighted = $highlighted | append .RelPermalink }}{{ end }}
   {{ $recent := slice }}
   {{ range $posts.ByDate.Reverse }}
-    {{ if not .Params.featured }}
+    {{ if not (in $highlighted .RelPermalink) }}
       {{ $recent = $recent | append . }}
     {{ end }}
   {{ end }}

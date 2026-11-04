@@ -88,7 +88,7 @@ series = ["example-series"]
 showToc = false
 ```
 
-- `featured = true` selects an article for the homepage. `featured_rank` orders selected articles: the lowest rank becomes the lead essay. If no article is marked, the most recent one is used.
+- The homepage always leads with the most recent published article. `featured = true` adds an article to the “More starting points” selection, and `featured_rank` orders those selected articles.
 - `topics` assigns the article to broad areas of exploration. The homepage currently uses `programming-languages`, `software-architecture`, `programmable-environments`, and `systems-design`.
 - `series` groups articles into ordered sequences. The homepage currently presents `programmable-spreadsheet` and `cronx`; `project-euler` is also modeled as a series.
 - `showToc = true` forces the table of contents; by default it is shown for articles longer than 700 words.

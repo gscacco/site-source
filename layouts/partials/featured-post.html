@@ -1,8 +1,9 @@
-{{ $page := . }}
+{{ $page := .page }}
+{{ $eyebrow := .eyebrow | default "Selected essay" }}
 {{ $rank := $page.Params.featured_rank | default 1 }}
 <section class="featured-essay" aria-labelledby="featured-heading">
   <div class="featured-essay__label">
-    <span class="eyebrow">Selected essay</span>
+    <span class="eyebrow">{{ $eyebrow }}</span>
     <span class="featured-essay__rule" aria-hidden="true"></span>
   </div>
   <div class="featured-essay__grid">

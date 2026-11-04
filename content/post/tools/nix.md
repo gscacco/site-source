@@ -1,6 +1,6 @@
 +++
 date = "2026-11-04T00:00:00+00:00"
-draft = true
+draft = false
 title = "Nix, Docker, and the Difference Between a Build and an Environment"
 subtitle = "A container preserves a system; Nix describes how that system was produced."
 description = "Why reproducible builds depend on explicit inputs, and why Nix and Docker answer different questions."

@@ -1,8 +1,14 @@
 {{ $posts := where site.RegularPages "Section" "post" }}
-{{ $featured := where $posts "Params.featured" true }}
-{{ if eq (len $featured) 0 }}
-  {{ $featured = first 1 $posts.ByDate.Reverse }}
-{{ else }}
-  {{ $featured = sort $featured "Params.featured_rank" }}
+{{ $result := slice }}
+{{ $sorted := $posts.ByDate.Reverse }}
+{{ if $sorted }}
+  {{ $latest := index $sorted 0 }}
+  {{ $result = $result | append $latest }}
+  {{ $featured := sort (where $posts "Params.featured" true) "Params.featured_rank" }}
+  {{ range $featured }}
+    {{ if ne .RelPermalink $latest.RelPermalink }}
+      {{ $result = $result | append . }}
+    {{ end }}
+  {{ end }}
 {{ end }}
-{{ return $featured }}
+{{ return $result }}
