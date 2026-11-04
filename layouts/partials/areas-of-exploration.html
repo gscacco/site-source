@@ -21,7 +21,7 @@
               {{ end }}
             </ul>
             {{ with $area.collection }}
-              <p><a class="text-link" href="{{ .url | relLangURL }}">{{ .label }} <span aria-hidden="true">→</span></a></p>
+              <p><a class="text-link" href="{{ strings.TrimPrefix "/" .url | relLangURL }}">{{ .label }} <span aria-hidden="true">→</span></a></p>
             {{ end }}
           </div>
         </li>

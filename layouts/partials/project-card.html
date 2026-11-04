@@ -1,6 +1,8 @@
 {{ $project := . }}
 {{ $isExternal := hasPrefix $project.url "http" }}
-<a class="project-card" href="{{ $project.url }}"{{ if $isExternal }} rel="noopener"{{ end }}>
+{{ $href := $project.url }}
+{{ if not $isExternal }}{{ $href = strings.TrimPrefix "/" $project.url | relLangURL }}{{ end }}
+<a class="project-card" href="{{ $href }}"{{ if $isExternal }} rel="noopener"{{ end }}>
   <span class="project-card__kicker">{{ $project.kicker }}</span>
   <span class="project-card__name">{{ $project.name }}</span>
   <span class="project-card__description">{{ $project.description }}</span>
