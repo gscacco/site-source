@@ -173,3 +173,7 @@ Project URLs may point to internal series, topic, or tag collections. Their intr
 ## Publishing
 
 The GitHub Actions workflow publishes the site to GitHub Pages on every push to the `master` branch. CI uses Hugo `0.168.0`, the same version provided by the flake, and uploads the `public/` directory as the Pages artifact.
+
+## Comments
+
+Comments on published articles use Giscus and are stored as GitHub Discussions in the `Announcements` category of `gscacco/site-source`. The widget is configured under `[params.giscus]` in `config.toml` and rendered by `layouts/partials/giscus.html`. The Giscus GitHub App must remain installed on the repository.

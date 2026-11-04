@@ -33,10 +33,10 @@
         {{ partial "article-nav.html" . }}
       </nav>
 
-      {{ if and (not .Draft) site.Config.Services.Disqus.Shortname }}
+      {{ if and (not .Draft) site.Params.giscus.repoId }}
         <section class="comments" aria-label="Comments">
           <p class="eyebrow">Discussion</p>
-          {{ template "_internal/disqus.html" . }}
+          {{ partial "giscus.html" . }}
         </section>
       {{ end }}
     </footer>

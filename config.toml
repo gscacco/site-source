@@ -21,7 +21,20 @@ enableRobotsTXT = true
   author = "G. Scacco"
   tagline = "Programming and beyond"
   description = "A blog about computer science and beyond"
-  disqusShortname = "gscaccoio"
+
+  [params.giscus]
+    repo = "gscacco/site-source"
+    repoId = "MDEwOlJlcG9zaXRvcnkzNzgwMzY2Mg=="
+    category = "Announcements"
+    categoryId = "DIC_kwDOAkDWjs4DKW0E"
+    mapping = "pathname"
+    strict = "1"
+    reactionsEnabled = "1"
+    emitMetadata = "0"
+    inputPosition = "bottom"
+    theme = "light"
+    lang = "en"
+    loading = "lazy"
 
 [markup]
   [markup.goldmark.renderer]
@@ -34,9 +47,6 @@ enableRobotsTXT = true
     startLevel = 2
     endLevel = 3
     ordered = false
-
-[services.disqus]
-  shortname = "gscaccoio"
 
 [[menus.main]]
   name = "Home"
