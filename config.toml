@@ -57,8 +57,3 @@ enableRobotsTXT = true
   name = "Tags"
   pageRef = "/tags"
   weight = 30
-
-[[menus.social]]
-  name = "Twitter"
-  url = "https://twitter.com/gscaccoio"
-  weight = 10
